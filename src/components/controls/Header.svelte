@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Link } from 'svelte-routing';
   import type { MenuItem } from '~/components/controls/Menu.svelte';
   import { createEventDispatcher } from 'svelte';
   import DropDown from './DropDown.svelte';
@@ -8,8 +9,8 @@
   import MenuIcon from '~/lib/icons/MenuIcon.svelte';
 
   export let title: string;
-  export let back = false;
-  export let add = false;
+  export let returnPath: string = undefined;
+  export let addPath: string = undefined;
   export let menuItems: MenuItem[] = null;
 
   let dropDown: any = null;
@@ -19,14 +20,8 @@
 
 <header class="header">
   <div class="back">
-    {#if back}
-      <button
-        class="button"
-        on:click={() => {
-          dispatch('back');
-        }}>
-        <BackIcon />
-      </button>
+    {#if returnPath}
+      <Link class="link" to={returnPath}><BackIcon /></Link>
     {/if}
   </div>
 
@@ -35,18 +30,12 @@
   </h1>
 
   <div class="buttons">
-    {#if add}
-      <button
-        class="button"
-        on:click={() => {
-          dispatch('add');
-        }}>
-        <PlusIcon />
-      </button>
+    {#if addPath}
+      <Link class="link" to={addPath}><PlusIcon /></Link>
     {/if}
 
     {#if menuItems}
-      <DropDown bind:this={dropDown}>
+      <DropDown class="dropdown" bind:this={dropDown}>
         <MenuIcon />
         <div slot="content">
           <Menu
@@ -69,6 +58,7 @@
     background-color: cadetblue;
     display: flex;
     align-items: center;
+    color: #fff;
   }
 
   .title {
@@ -79,6 +69,12 @@
     color: #fff;
     text-align: center;
     font-weight: normal;
+  }
+
+  .link {
+    color: inherit;
+    display: flex;
+    align-items: center;
   }
 
   .buttons {
@@ -92,17 +88,7 @@
     min-width: 24px;
   }
 
-  .button {
-    display: flex;
-    align-items: center;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    background-color: transparent;
-    color: #fff;
-    &:hover,
-    &:active {
-      color: #eee;
-    }
+  .dropdown {
+    color: var(--default-text-color);
   }
 </style>

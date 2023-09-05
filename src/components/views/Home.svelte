@@ -23,15 +23,18 @@
   const menuItems = [
     {
       id: 'groups',
-      title: 'Account Groups'
+      title: 'Account Groups',
+      to: 'groups'
     },
     {
       id: 'category',
-      title: 'Categories'
+      title: 'Categories',
+      to: 'categories'
     },
     {
       id: 'currency',
-      title: 'Currencies'
+      title: 'Currencies',
+      to: 'currencies'
     },
     {
       id: 'backup',
@@ -43,7 +46,8 @@
     },
     {
       id: 'settings',
-      title: 'Settings'
+      title: 'Settings',
+      to: 'settings'
     }
   ];
 
@@ -62,29 +66,10 @@
   <Header
     slot="header"
     title="Accounts"
-    add
-    on:add={() => {
-      navigate('/accounts/new');
-    }}
+    addPath={'accounts/new'}
     {menuItems}
     on:menu={(e) => {
       switch (e.detail.id) {
-        case 'groups':
-          navigate('/groups');
-          break;
-
-        case 'category':
-          navigate('/categories');
-          break;
-
-        case 'currency':
-          navigate('/currencies');
-          break;
-
-        case 'settings':
-          navigate('/settings');
-          break;
-
         case 'backup':
           getDBSnapshot().then((backup) => {
             downloadJSON(backup, `${formatTimestamp(Date.now())}.json`);

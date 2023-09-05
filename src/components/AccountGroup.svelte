@@ -1,9 +1,10 @@
 <script lang="ts">
   import { navigate } from 'svelte-routing';
+  import Account from './Account.svelte';
   import { type AccountGroupDoc } from '~/lib/db';
   import { accounts } from '~/lib/store';
-  import Account from './Account.svelte';
   import { formatAmount, getGroupBalance } from '~/lib/utils';
+  import { basepath } from '~/lib/const';
 
   export let accountGroup: AccountGroupDoc;
 
@@ -21,7 +22,7 @@
     <Account
       {account}
       on:account={(e) => {
-        navigate(`/accounts/${e.detail.id}`);
+        navigate(`${basepath}/accounts/${e.detail.id}`);
       }} />
   {/each}
 </div>

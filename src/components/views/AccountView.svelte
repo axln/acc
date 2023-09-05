@@ -5,7 +5,8 @@
   import Entry from '~/components/Entry.svelte';
   import { getEntries, type EntryDoc } from '~/lib/db';
   import { accounts } from '~/lib/store';
-  import { formatAmount, formatDate } from '~/lib/utils';
+  import { formatDate } from '~/lib/utils';
+  import { basepath } from '~/lib/const';
 
   type EntryGroup = Record<string, EntryDoc[]>;
 
@@ -33,7 +34,8 @@
   const menuItems = [
     {
       id: 'edit',
-      title: 'Edit'
+      title: 'Edit',
+      to: `accounts/${id}/edit`
     }
   ];
 </script>
@@ -42,29 +44,16 @@
   <Header
     slot="header"
     title={account ? `${account.title}` : 'Not Found'}
-    back
-    on:back={() => {
-      navigate('/');
-    }}
-    add
-    on:add={() => {
-      navigate(`/accounts/${id}/transactions/new`);
-    }}
-    {menuItems}
-    on:menu={(e) => {
-      switch (e.detail.id) {
-        case 'edit':
-          navigate(`/accounts/${id}/edit`);
-          break;
-      }
-    }} />
+    returnPath="/"
+    addPath={`accounts/${id}/transactions/new`}
+    {menuItems} />
 
   {#each Object.keys(entriesByDays) as dayKey}
     <div class="day">{dayKey}</div>
     {#each entriesByDays[dayKey] as entry (entry.id)}
       <Entry
         on:transaction={(e) => {
-          navigate(`/accounts/${id}/transactions/${e.detail.id}`);
+          navigate(`${basepath}/accounts/${id}/transactions/${e.detail.id}`);
         }}
         {entry} />
     {/each}

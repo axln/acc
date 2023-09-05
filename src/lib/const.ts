@@ -37,3 +37,5 @@ export const currencyRates = {
 export const baseCurrency = 'RUB';
 
 export const baseCurrencyName = 'baseCurrencyCode';
+
+export const basepath = '/acc/dist';

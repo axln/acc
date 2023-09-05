@@ -5,26 +5,19 @@
   import CurrencySelect from '../controls/CurrencySelect.svelte';
   import { settings } from '~/lib/store';
   import { updateSettings } from '~/lib/db';
-  import { baseCurrencyName } from '~/lib/const';
+  import { baseCurrencyName, basepath } from '~/lib/const';
 
   let currencyCode = $settings.find((item) => item.name === baseCurrencyName)?.value;
 
   function submitHandler() {
     updateSettings({ name: baseCurrencyName, value: currencyCode }).then(() => {
-      navigate('/');
+      navigate(`${basepath}/`);
     });
   }
 </script>
 
 <View>
-  <Header
-    slot="header"
-    title="Settings"
-    back
-    add
-    on:back={() => {
-      navigate('/');
-    }} />
+  <Header slot="header" title="Settings" returnPath="/" />
   <form class="form" on:submit|preventDefault={submitHandler}>
     <div>
       Base currency:

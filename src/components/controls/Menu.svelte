@@ -1,7 +1,9 @@
 <script context="module" lang="ts">
+  import { Link } from 'svelte-routing';
   export interface MenuItem {
     id: string;
     title: string;
+    to?: string;
   }
 </script>
 
@@ -23,7 +25,11 @@
       on:click={(event) => {
         dispatch('menu', { id: event.currentTarget.dataset.id });
       }}>
-      {item.title}
+      {#if item.to}
+        <Link class="link" to={item.to}>{item.title}</Link>
+      {:else}
+        <span class="text">{item.title}</span>
+      {/if}
     </li>
   {/each}
 </ul>
@@ -37,7 +43,6 @@
   }
 
   .item {
-    padding: 10px 30px 10px 20px;
     white-space: nowrap;
     cursor: pointer;
 
@@ -48,5 +53,17 @@
     &:active {
       background-color: #d1e3f0;
     }
+  }
+
+  .link {
+    text-decoration: none;
+    color: inherit;
+    padding: 10px 30px 10px 20px;
+    display: block;
+  }
+
+  .text {
+    padding: 10px 30px 10px 20px;
+    display: block;
   }
 </style>

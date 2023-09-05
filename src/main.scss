@@ -1,6 +1,7 @@
 $default-text-color: #444;
 
 :root {
+  --default-text-color: #{$default-text-color};
   font-family: Arial, sans-serif;
   line-height: 1.5;
   color: $default-text-color;

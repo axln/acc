@@ -6,6 +6,7 @@
   import CurrencySelect from '~/components/controls/CurrencySelect.svelte';
   import { accountGroups } from '~/lib/store';
   import { createAccountGroup, updateAccountGroup } from '~/lib/db';
+  import { basepath } from '~/lib/const';
 
   export let id: string = undefined;
   let accountGroupDoc = id ? $accountGroups.find((item) => item.id === id) : null;
@@ -30,7 +31,7 @@
           currencyCode
         })
           .then(() => {
-            navigate('/groups');
+            navigate(`${basepath}/groups`);
           })
           .finally(() => {
             adding = false;
@@ -38,7 +39,7 @@
       } else {
         createAccountGroup(title, currencyCode)
           .then(() => {
-            navigate('/groups');
+            navigate(`${basepath}/groups`);
           })
           .finally(() => {
             adding = false;
@@ -54,10 +55,7 @@
   <Header
     slot="header"
     title={accountGroupDoc ? 'Account Group' : 'New Account Group'}
-    back
-    on:back={() => {
-      navigate('/groups');
-    }} />
+    returnPath="groups" />
 
   <form class="form" on:submit|preventDefault={submitHandler}>
     <div>

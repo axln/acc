@@ -5,6 +5,7 @@
   import AccountForm from '~/components/AccountForm.svelte';
   import { createAccount, updateAccount } from '~/lib/db';
   import { accounts } from '~/lib/store';
+  import { basepath } from '~/lib/const';
 
   export let id: string = null;
   let accountDoc = id ? $accounts.find((item) => item.id === id) : null;
@@ -18,24 +19,18 @@
         groupId,
         currencyCode
       }).then(() => {
-        navigate('/');
+        navigate(`${basepath}/`);
       });
     } else {
       createAccount(title, groupId, currencyCode).then(() => {
-        navigate('/');
+        navigate(`${basepath}/`);
       });
     }
   }
 </script>
 
 <View>
-  <Header
-    slot="header"
-    title={id ? accountDoc?.title : 'New Account'}
-    back
-    on:back={() => {
-      navigate('/');
-    }} />
+  <Header slot="header" title={id ? accountDoc?.title : 'New Account'} returnPath="/" />
 
   {#if id}
     <AccountForm class="editor" {accountDoc} on:save={saveHandler} />

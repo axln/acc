@@ -5,6 +5,7 @@
   import Header from '~/components/controls/Header.svelte';
   import { createCategory, updateCategory } from '~/lib/db';
   import { categoires } from '~/lib/store';
+  import { basepath } from '~/lib/const';
 
   export let id: string = undefined;
   let categoryDoc = id ? $categoires.find((item) => item.id === id) : null;
@@ -27,11 +28,11 @@
           title: title.trim(),
           subtitle: subtitle.trim()
         }).then(() => {
-          navigate('/categories');
+          navigate(`${basepath}/categories`);
         });
       } else {
         createCategory(title.trim(), subtitle.trim()).then(() => {
-          navigate('/categories');
+          navigate(`${basepath}/categories`);
         });
       }
     } else {
@@ -41,13 +42,7 @@
 </script>
 
 <View>
-  <Header
-    slot="header"
-    title={categoryDoc ? 'Category' : 'New Category'}
-    back
-    on:back={() => {
-      navigate('/categories');
-    }} />
+  <Header slot="header" title={categoryDoc ? 'Category' : 'New Category'} returnPath="categories" />
   <form class="form" on:submit|preventDefault={submitHandler}>
     <div class="row">
       <input type="text" placeholder="Title" bind:value={title} bind:this={titleInput} />

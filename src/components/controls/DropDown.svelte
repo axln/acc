@@ -2,13 +2,15 @@
   import { autoClose } from '~/lib/autoClose';
 
   let dropdown: HTMLDivElement;
+  let className: string = undefined;
+  export { className as class };
 
   export function close() {
     dropdown.toggleAttribute('data-opened', false);
   }
 </script>
 
-<div class="dropdown" bind:this={dropdown} use:autoClose>
+<div class="dropdown {className}" bind:this={dropdown} use:autoClose>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div

@@ -12,10 +12,11 @@
   import CurrencyEditor from '~/components/views/CurrencyEditor.svelte';
   import TransactionEditor from '~/components/views/TransactionEditor.svelte';
   import { initTask } from '~/lib/db';
+  import { basepath } from './lib/const';
 </script>
 
 {#await initTask then}
-  <Router basepath="/acc/dist">
+  <Router {basepath}>
     <Route path="/" component={Home} />
     <Route path="/groups" component={AccountGroups} />
     <Route path="/groups/new" component={AccountGroupEditor} />

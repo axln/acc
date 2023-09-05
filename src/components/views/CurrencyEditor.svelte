@@ -5,6 +5,7 @@
   import Header from '~/components/controls/Header.svelte';
   import { createCurrency, updateCurrency } from '~/lib/db';
   import { currencies } from '~/lib/store';
+  import { basepath } from '~/lib/const';
 
   export let cid: string = undefined;
 
@@ -23,11 +24,11 @@
           ...currencyDoc,
           title: title.trim()
         }).then(() => {
-          navigate('/currencies');
+          navigate(`${basepath}/currencies`);
         });
       } else {
         createCurrency(code.trim(), title.trim()).then(() => {
-          navigate('/currencies');
+          navigate(`${basepath}/currencies`);
         });
       }
     } else {
@@ -49,13 +50,7 @@
 </script>
 
 <View>
-  <Header
-    slot="header"
-    title={currencyDoc ? 'Currency' : 'New Currency'}
-    back
-    on:back={() => {
-      navigate('/currencies');
-    }} />
+  <Header slot="header" title={currencyDoc ? 'Currency' : 'New Currency'} returnPath="currencies" />
   <form on:submit|preventDefault={submitHandler}>
     <div class="row">
       <input

@@ -3,27 +3,18 @@
   import View from '~/components/controls/View.svelte';
   import Header from '~/components/controls/Header.svelte';
   import { categoires } from '~/lib/store';
+  import { basepath } from '~/lib/const';
 
   function clickHandler(e: MouseEvent) {
     if ((e.target as HTMLDivElement).dataset.id) {
       const categoryId = (e.target as HTMLDivElement).dataset.id;
-      navigate(`/categories/${categoryId}`);
+      navigate(`${basepath}/categories/${categoryId}`);
     }
   }
 </script>
 
 <View>
-  <Header
-    slot="header"
-    title="Categories"
-    back
-    add
-    on:back={() => {
-      navigate('/');
-    }}
-    on:add={() => {
-      navigate('/categories/new');
-    }} />
+  <Header slot="header" title="Categories" returnPath="/" addPath="categories/new" />
   {#each $categoires as category (category.id)}
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->

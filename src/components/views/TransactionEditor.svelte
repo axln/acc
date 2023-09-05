@@ -10,6 +10,7 @@
     createTransaction,
     updateTransaction
   } from '~/lib/db';
+  import { basepath } from '~/lib/const';
 
   export let id: string;
   export let tid: string = undefined;
@@ -24,24 +25,18 @@
     // console.log('trans params:', e.detail.params);
     if (tid) {
       updateTransaction(transactionDoc, e.detail.params).then(() => {
-        navigate(`/accounts/${id}`);
+        navigate(`${basepath}/accounts/${id}`);
       });
     } else {
       createTransaction(e.detail.params).then(() => {
-        navigate(`/accounts/${id}`);
+        navigate(`${basepath}/accounts/${id}`);
       });
     }
   }
 </script>
 
 <View>
-  <Header
-    slot="header"
-    title="Transaction"
-    back
-    on:back={() => {
-      navigate(`/accounts/${id}`);
-    }} />
+  <Header slot="header" title="Transaction" returnPath={`accounts/${id}`} />
   {#if tid}
     {#await loadTransaction(tid) then}
       <TransactionForm accountId={id} {transactionDoc} on:save={saveHandler} />
