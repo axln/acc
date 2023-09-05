@@ -58,6 +58,7 @@
   .info,
   .details {
     display: flex;
+    gap: 10px;
   }
 
   .details {
