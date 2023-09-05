@@ -29,6 +29,6 @@ export default defineConfig(({ mode }) => {
     server: {
       host: '0.0.0.0'
     },
-    base: ''
+    base: 'acc/dist'
   };
 });

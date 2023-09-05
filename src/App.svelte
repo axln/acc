@@ -15,7 +15,7 @@
 </script>
 
 {#await initTask then}
-  <Router>
+  <Router basepath="/acc/dist">
     <Route path="/" component={Home} />
     <Route path="/groups" component={AccountGroups} />
     <Route path="/groups/new" component={AccountGroupEditor} />
