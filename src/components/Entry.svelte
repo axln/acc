@@ -73,7 +73,7 @@
 
   .amount,
   .total {
-    flex: 0 0 100px;
+    flex: 0 0 auto;
     text-align: right;
   }
 
