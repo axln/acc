@@ -115,6 +115,8 @@
     background-color: #f4f4f8;
     display: flex;
     border-bottom: 1px solid #eee;
+    font-weight: bold;
+    color: #777;
   }
 
   .amount {
