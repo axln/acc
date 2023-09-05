@@ -1,0 +1,30 @@
+$default-text-color: #444;
+
+:root {
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+  color: $default-text-color;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+*,
+::before,
+::after {
+  box-sizing: inherit;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+}
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
