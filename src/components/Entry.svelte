@@ -84,6 +84,7 @@
     padding: 1px 3px;
     border-radius: 5px;
     line-height: 1em;
+    white-space: nowrap;
   }
 
   .title:not(:only-child) {
