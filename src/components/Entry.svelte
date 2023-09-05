@@ -2,7 +2,7 @@
   import { createEventDispatcher } from 'svelte';
   import type { EntryDoc } from '~/lib/db';
   import { categoires } from '~/lib/store';
-  import { formatAmount, formatTimestamp } from '~/lib/utils';
+  import { formatAmount, formatTime } from '~/lib/utils';
 
   export let entry: EntryDoc;
 
@@ -35,7 +35,7 @@
   </div>
 
   <div class="details">
-    <div class="time">{formatTimestamp(entry.timestamp)}</div>
+    <div class="time">{formatTime(entry.timestamp)}</div>
     <div class="total">{formatAmount(entry.total, true)}</div>
   </div>
 </div>
