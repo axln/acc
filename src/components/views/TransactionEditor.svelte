@@ -8,7 +8,8 @@
     getTransaction,
     type TransactionParams,
     createTransaction,
-    updateTransaction
+    updateTransaction,
+    deleteTransaction
   } from '~/lib/db';
   import { basepath } from '~/lib/const';
 
@@ -16,6 +17,15 @@
   export let tid: string = undefined;
 
   let transactionDoc: TransactionDoc;
+
+  const menuItems = tid
+    ? [
+        {
+          id: 'delete',
+          title: 'Delete'
+        }
+      ]
+    : null;
 
   async function loadTransaction(id: string) {
     transactionDoc = await getTransaction(id);
@@ -36,7 +46,25 @@
 </script>
 
 <View>
-  <Header slot="header" title="Transaction" returnPath={`accounts/${id}`} />
+  <Header
+    slot="header"
+    title="Transaction"
+    returnPath={`accounts/${id}`}
+    {menuItems}
+    on:menu={(e) => {
+      switch (e.detail.id) {
+        case 'delete':
+          if (!confirm('Delete transaction?')) {
+            return false;
+          }
+          if (tid) {
+            deleteTransaction(tid).then(() => {
+              navigate(`${basepath}/accounts/${id}`);
+            });
+          }
+          break;
+      }
+    }} />
   {#if tid}
     {#await loadTransaction(tid) then}
       <TransactionForm accountId={id} {transactionDoc} on:save={saveHandler} />

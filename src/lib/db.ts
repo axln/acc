@@ -183,6 +183,22 @@ export async function updateAccount(accountDoc: AccountDoc) {
   accounts.set(await getAccounts());
 }
 
+export async function deleteTransaction(id: string) {
+  const transactionDoc = await db.get('transactions', id);
+  await Promise.all([
+    db.delete('transactions', id),
+    db.delete('entries', transactionDoc.entryId),
+    transactionDoc.secondEntryId ? db.delete('entries', transactionDoc.secondEntryId) : null
+  ]);
+
+  await Promise.all([
+    recalcBalance(transactionDoc.accountId),
+    transactionDoc.secondAccountId ? recalcBalance(transactionDoc.secondAccountId) : null
+  ]);
+
+  accounts.set(await getAccounts());
+}
+
 export async function updateTransaction(
   prevTransactionDoc: TransactionDoc,
   newParams: TransactionParams
