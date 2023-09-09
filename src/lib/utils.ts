@@ -73,7 +73,7 @@ export function parseAmount(value: string): number {
 
 export function formatAmount(value: number, sep?: boolean, plus?: boolean) {
   value = Math.round(value);
-  const wholePart = Math.floor(value / 100);
+  const wholePart = value < 0 ? Math.ceil(value / 100) : Math.floor(value / 100);
   const decimalPart = Math.abs(value % 100);
 
   return (
