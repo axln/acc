@@ -229,7 +229,11 @@ export async function updateTransaction(
 
   const [changed1, changed2] = await Promise.all([
     recalcBalance(transactionDoc.accountId),
-    transactionDoc.secondAccountId ? recalcBalance(transactionDoc.secondAccountId) : null
+    transactionDoc.secondAccountId ? recalcBalance(transactionDoc.secondAccountId) : null,
+    prevTransactionDoc.secondAccountId &&
+    prevTransactionDoc.secondAccountId !== newParams.secondAccountId
+      ? recalcBalance(prevTransactionDoc.secondAccountId)
+      : null
   ]);
 
   if (changed1 || changed2) {

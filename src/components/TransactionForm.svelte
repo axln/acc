@@ -45,53 +45,59 @@
   const dispatch = createEventDispatcher();
 
   function submitHandler() {
-    if (validateFields()) {
-      const params =
-        kind === TransactionKind.Transfer
-          ? {
-              kind,
-              timestamp: new Date(timestamp).getTime(),
-              accountId,
-              secondAccountId,
-              ...(secondCurrency
-                ? {
-                    secondAmount: parseAmount(secondAmount)
-                  }
-                : {}),
-              amount: parseAmount(amount),
-              comment: comment.trim()
-            }
-          : {
-              kind,
-              timestamp: new Date(timestamp).getTime(),
-              accountId,
-              categoryId: categoryId || null,
-              amount: parseAmount(amount),
-              comment: comment.trim()
-            };
-
-      dispatch('save', { params });
-    } else {
-      alert('Please fill all the fields.');
+    const validationError = validateFields();
+    if (validationError) {
+      alert(validationError);
+      return;
     }
+
+    const params =
+      kind === TransactionKind.Transfer
+        ? {
+            kind,
+            timestamp: new Date(timestamp).getTime(),
+            accountId,
+            secondAccountId,
+            ...(secondCurrency
+              ? {
+                  secondAmount: parseAmount(secondAmount)
+                }
+              : {}),
+            amount: parseAmount(amount),
+            comment: comment.trim()
+          }
+        : {
+            kind,
+            timestamp: new Date(timestamp).getTime(),
+            accountId,
+            categoryId: categoryId || null,
+            amount: parseAmount(amount),
+            comment: comment.trim()
+          };
+
+    dispatch('save', { params });
   }
 
-  function validateFields() {
+  function validateFields(): string {
     if (!validateAmount(amount)) {
-      return false;
+      return 'Invalid amount';
     }
 
     if (kind === TransactionKind.Transfer) {
       if (!secondAccountId) {
-        return false;
+        return 'Must choose the second account';
+      }
+
+      if (secondAccountId === accountId) {
+        return 'Cannot transfer to the same account';
       }
 
       if (secondCurrency && !validateAmount(secondAmount)) {
-        return false;
+        return 'Invalid second amount';
       }
     }
 
-    return true;
+    return '';
   }
 </script>
 

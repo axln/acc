@@ -12,9 +12,12 @@
     deleteTransaction
   } from '~/lib/db';
   import { basepath } from '~/lib/const';
+  import { accounts } from '~/lib/store';
 
   export let id: string;
   export let tid: string = undefined;
+
+  $: account = $accounts.find((account) => account.id === id);
 
   let transactionDoc: TransactionDoc;
 
@@ -48,7 +51,7 @@
 <View>
   <Header
     slot="header"
-    title="Transaction"
+    title={account ? `${account.title}: Transaction` : 'Transaction'}
     returnPath={`accounts/${id}`}
     {menuItems}
     on:menu={(e) => {
