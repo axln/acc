@@ -33,8 +33,8 @@
 
   let timestamp = getLocalCustomISODateString(new Date(transactionDoc?.timestamp || Date.now()));
 
-  let amount: string = transactionDoc ? formatAmount(transactionDoc.amount) : '1.00';
-  let secondAmount: string = transactionDoc ? formatAmount(transactionDoc.secondAmount) : '1.00';
+  let amount: string = transactionDoc ? formatAmount(transactionDoc.amount) : '';
+  let secondAmount: string = transactionDoc ? formatAmount(transactionDoc.secondAmount) : '';
 
   $: account = $accounts.find((item) => item.id === accountId);
   $: currencyCode = account?.currencyCode;
