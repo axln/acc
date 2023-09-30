@@ -9,6 +9,8 @@ import {
   getCategories
 } from './db';
 
+const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
 export function getLocalCustomISODateString(date: Date) {
   const offset = date.getTimezoneOffset() * 60000; // Convert to milliseconds
   const localTime = new Date(date.getTime() - offset);
@@ -44,8 +46,9 @@ export function formatDate(timestamp: number) {
   const year = localTime.getFullYear();
   const month = String(localTime.getUTCMonth() + 1).padStart(2, '0');
   const day = String(localTime.getUTCDate()).padStart(2, '0');
+  const weekDay = weekDays[date.getUTCDay()];
 
-  return `${year}-${month}-${day}`;
+  return `${year}-${month}-${day} ${weekDay}`;
 }
 
 export function formatTime(timestamp: number) {
