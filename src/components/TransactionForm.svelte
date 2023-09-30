@@ -111,6 +111,10 @@
   </div>
 
   <div>
+    <input class="input" type="datetime-local" bind:value={timestamp} />
+  </div>
+
+  <div>
     {#if kind === TransactionKind.Transfer}
       <AccountSelect bind:accountId={secondAccountId} placeholder="To" />
     {:else}
@@ -124,10 +128,6 @@
           }}>Clear</button>
       </div>
     {/if}
-  </div>
-
-  <div>
-    <input class="input" type="datetime-local" bind:value={timestamp} />
   </div>
 
   <div>
