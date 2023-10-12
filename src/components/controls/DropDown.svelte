@@ -56,6 +56,7 @@
 
   .dropdown {
     position: relative;
+    
     &[data-opened] {
       > .caption {
         color: #fff;

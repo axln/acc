@@ -37,7 +37,7 @@
     {#if menuItems}
       <DropDown class="dropdown" bind:this={dropDown}>
         <MenuIcon />
-        <div slot="content">
+        <svelte:fragment slot="content">
           <Menu
             items={menuItems}
             on:menu={(e) => {
@@ -46,7 +46,7 @@
                 id: e.detail.id
               });
             }} />
-        </div>
+        </svelte:fragment>
       </DropDown>
     {/if}
   </div>
