@@ -1,9 +1,8 @@
 <script lang="ts">
-  import { navigate } from 'svelte-routing';
+  import { push } from 'svelte-spa-router';
   import View from '~/components/controls/View.svelte';
   import Header from '~/components/controls/Header.svelte';
   import { currencies } from '~/lib/store';
-  import { basepath } from '~/lib/const';
 
   function clickHandler(e: MouseEvent) {
     console.log('e:', e);
@@ -11,14 +10,14 @@
     if (e.target instanceof HTMLElement) {
       const item = e.target.closest('[data-role="item"]');
       if (item instanceof HTMLElement && item.dataset.code) {
-        navigate(`${basepath}/currencies/${item.dataset.code}`);
+        push(`/currencies/${item.dataset.code}`);
       }
     }
   }
 </script>
 
 <View>
-  <Header slot="header" title="Currencies" returnPath="/" addPath="currencies/new" />
+  <Header slot="header" title="Currencies" returnPath="/" addPath="/currencies/new" />
 
   {#each $currencies as currency (currency.code)}
     <!-- svelte-ignore a11y-click-events-have-key-events -->

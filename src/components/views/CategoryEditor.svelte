@@ -1,13 +1,14 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { navigate } from 'svelte-routing';
+  import { push } from 'svelte-spa-router';
   import View from '~/components/controls/View.svelte';
   import Header from '~/components/controls/Header.svelte';
   import { createCategory, updateCategory } from '~/lib/db';
   import { categoires } from '~/lib/store';
-  import { basepath } from '~/lib/const';
 
-  export let id: string = undefined;
+  export let params: { id: string };
+  const { id } = params;
+
   let categoryDoc = id ? $categoires.find((item) => item.id === id) : null;
   let title = categoryDoc ? categoryDoc.title : '';
   let subtitle = categoryDoc ? categoryDoc.subtitle : '';
@@ -28,11 +29,11 @@
           title: title.trim(),
           subtitle: subtitle.trim()
         }).then(() => {
-          navigate(`${basepath}/categories`);
+          push(`/categories`);
         });
       } else {
         createCategory(title.trim(), subtitle.trim()).then(() => {
-          navigate(`${basepath}/categories`);
+          push(`/categories`);
         });
       }
     } else {
@@ -42,7 +43,10 @@
 </script>
 
 <View>
-  <Header slot="header" title={categoryDoc ? 'Category' : 'New Category'} returnPath="categories" />
+  <Header
+    slot="header"
+    title={categoryDoc ? 'Category' : 'New Category'}
+    returnPath="/categories" />
   <form class="form" on:submit|preventDefault={submitHandler}>
     <div class="row">
       <input type="text" placeholder="Title" bind:value={title} bind:this={titleInput} />

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { navigate } from 'svelte-routing';
   import Header from '~/components/controls/Header.svelte';
   import View from '~/components/controls/View.svelte';
   import AccountGroup from '~/components/AccountGroup.svelte';
@@ -24,17 +23,17 @@
     {
       id: 'groups',
       title: 'Account Groups',
-      to: 'groups'
+      to: '/groups'
     },
     {
       id: 'category',
       title: 'Categories',
-      to: 'categories'
+      to: '/categories'
     },
     {
       id: 'currency',
       title: 'Currencies',
-      to: 'currencies'
+      to: '/currencies'
     },
     {
       id: 'backup',
@@ -47,7 +46,7 @@
     {
       id: 'settings',
       title: 'Settings',
-      to: 'settings'
+      to: '/settings'
     }
   ];
 
@@ -66,7 +65,7 @@
   <Header
     slot="header"
     title="Accounts"
-    addPath={'accounts/new'}
+    addPath={'/accounts/new'}
     {menuItems}
     on:menu={(e) => {
       switch (e.detail.id) {

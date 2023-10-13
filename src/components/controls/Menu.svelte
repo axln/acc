@@ -1,5 +1,4 @@
 <script context="module" lang="ts">
-  import { Link } from 'svelte-routing';
   export interface MenuItem {
     id: string;
     title: string;
@@ -9,6 +8,7 @@
 
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
+  import { link } from 'svelte-spa-router';
 
   export let items: Array<MenuItem> = [];
 
@@ -26,7 +26,7 @@
         dispatch('menu', { id: event.currentTarget.dataset.id });
       }}>
       {#if item.to}
-        <Link class="link" to={item.to}>{item.title}</Link>
+        <a class="link" href={item.to} use:link>{item.title}</a>
       {:else}
         <span class="text">{item.title}</span>
       {/if}

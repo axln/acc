@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { Link } from 'svelte-routing';
-  import type { MenuItem } from '~/components/controls/Menu.svelte';
   import { createEventDispatcher } from 'svelte';
+  import { link } from 'svelte-spa-router';
+  import type { MenuItem } from '~/components/controls/Menu.svelte';
   import DropDown from './DropDown.svelte';
   import Menu from '~/components/controls/Menu.svelte';
-  import BackIcon from '~/lib/icons/BackIcon.svelte';
-  import PlusIcon from '~/lib/icons/PlusIcon.svelte';
-  import MenuIcon from '~/lib/icons/MenuIcon.svelte';
+  import BackIcon from '~/components/icons/BackIcon.svelte';
+  import PlusIcon from '~/components/icons/PlusIcon.svelte';
+  import MenuIcon from '~/components/icons/MenuIcon.svelte';
 
   export let title: string;
   export let returnPath: string = undefined;
@@ -21,7 +21,7 @@
 <header class="header">
   <div class="back">
     {#if returnPath}
-      <Link class="link" to={returnPath}><BackIcon /></Link>
+      <a class="link" href={returnPath} use:link><BackIcon /></a>
     {/if}
   </div>
 
@@ -31,7 +31,7 @@
 
   <div class="buttons">
     {#if addPath}
-      <Link class="link" to={addPath}><PlusIcon /></Link>
+      <a class="link" href={addPath} use:link><PlusIcon /></a>
     {/if}
 
     {#if menuItems}

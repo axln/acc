@@ -1,21 +1,22 @@
 <script lang="ts">
-  import { navigate } from 'svelte-routing';
+  import { push } from 'svelte-spa-router';
   import View from '~/components/controls/View.svelte';
   import Header from '~/components/controls/Header.svelte';
   import Entry from '~/components/Entry.svelte';
   import { getEntries, type EntryDoc } from '~/lib/db';
   import { accounts } from '~/lib/store';
   import { formatDate } from '~/lib/utils';
-  import { basepath } from '~/lib/const';
 
   type EntryGroup = Record<string, EntryDoc[]>;
 
-  export let id: string;
-  export let entries: EntryDoc[] = [];
-  export let entriesByDays: EntryGroup = {};
+  export let params: { id: string };
+  const { id } = params;
+
+  // let entries: EntryDoc[] = [];
+  let entriesByDays: EntryGroup = {};
 
   getEntries(id).then((entryDocs) => {
-    entries = entryDocs;
+    // entries = entryDocs;
 
     entriesByDays = entryDocs.reduce((acc, entry) => {
       const title = formatDate(entry.timestamp);
@@ -35,7 +36,7 @@
     {
       id: 'edit',
       title: 'Edit',
-      to: `accounts/${id}/edit`
+      to: `/accounts/${id}/edit`
     }
   ];
 </script>
@@ -45,7 +46,7 @@
     slot="header"
     title={account ? `${account.title}` : 'Not Found'}
     returnPath="/"
-    addPath={`accounts/${id}/transactions/new`}
+    addPath={`/accounts/${id}/transactions/new`}
     {menuItems} />
 
   {#each Object.keys(entriesByDays) as dayKey}
@@ -53,7 +54,7 @@
     {#each entriesByDays[dayKey] as entry (entry.id)}
       <Entry
         on:transaction={(e) => {
-          navigate(`${basepath}/accounts/${id}/transactions/${e.detail.id}`);
+          push(`/accounts/${id}/transactions/${e.detail.id}`);
         }}
         {entry} />
     {/each}

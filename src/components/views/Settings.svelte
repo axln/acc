@@ -1,17 +1,17 @@
 <script lang="ts">
-  import { navigate } from 'svelte-routing';
+  import { push } from 'svelte-spa-router';
   import View from '~/components/controls/View.svelte';
   import Header from '~/components/controls/Header.svelte';
   import CurrencySelect from '../controls/CurrencySelect.svelte';
   import { settings } from '~/lib/store';
   import { updateSettings } from '~/lib/db';
-  import { baseCurrencyName, basepath } from '~/lib/const';
+  import { baseCurrencyName } from '~/lib/const';
 
   let currencyCode = $settings.find((item) => item.name === baseCurrencyName)?.value;
 
   function submitHandler() {
     updateSettings({ name: baseCurrencyName, value: currencyCode }).then(() => {
-      navigate(`${basepath}/`);
+      push(`/`);
     });
   }
 </script>

@@ -1,13 +1,14 @@
 <script lang="ts">
-  import { navigate } from 'svelte-routing';
+  import { push } from 'svelte-spa-router';
   import View from '~/components/controls/View.svelte';
   import Header from '~/components/controls/Header.svelte';
   import AccountForm from '~/components/AccountForm.svelte';
   import { createAccount, updateAccount } from '~/lib/db';
   import { accounts } from '~/lib/store';
-  import { basepath } from '~/lib/const';
 
-  export let id: string = null;
+  export let params: { id: string };
+  const { id } = params;
+
   let accountDoc = id ? $accounts.find((item) => item.id === id) : null;
 
   function saveHandler(e: CustomEvent<{ title: string; groupId: string; currencyCode: string }>) {
@@ -19,11 +20,11 @@
         groupId,
         currencyCode
       }).then(() => {
-        navigate(`${basepath}/`);
+        push(`/`);
       });
     } else {
       createAccount(title, groupId, currencyCode).then(() => {
-        navigate(`${basepath}/`);
+        push(`/`);
       });
     }
   }

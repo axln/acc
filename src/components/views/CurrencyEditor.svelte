@@ -1,13 +1,13 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { navigate } from 'svelte-routing';
+  import { push } from 'svelte-spa-router';
   import View from '~/components/controls/View.svelte';
   import Header from '~/components/controls/Header.svelte';
   import { createCurrency, updateCurrency } from '~/lib/db';
   import { currencies } from '~/lib/store';
-  import { basepath } from '~/lib/const';
 
-  export let cid: string = undefined;
+  export let params: { cid: string };
+  const { cid } = params;
 
   let currencyDoc = cid ? $currencies.find((item) => item.code === cid) : null;
 
@@ -24,11 +24,11 @@
           ...currencyDoc,
           title: title.trim()
         }).then(() => {
-          navigate(`${basepath}/currencies`);
+          push(`/currencies`);
         });
       } else {
         createCurrency(code.trim(), title.trim()).then(() => {
-          navigate(`${basepath}/currencies`);
+          push(`/currencies`);
         });
       }
     } else {
@@ -50,7 +50,10 @@
 </script>
 
 <View>
-  <Header slot="header" title={currencyDoc ? 'Currency' : 'New Currency'} returnPath="currencies" />
+  <Header
+    slot="header"
+    title={currencyDoc ? 'Currency' : 'New Currency'}
+    returnPath="/currencies" />
   <form on:submit|preventDefault={submitHandler}>
     <div class="row">
       <input

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { navigate } from 'svelte-routing';
+  import { push } from 'svelte-spa-router';
   import View from '~/components/controls/View.svelte';
   import Header from '~/components/controls/Header.svelte';
   import TransactionForm from '~/components/TransactionForm.svelte';
@@ -11,11 +11,13 @@
     updateTransaction,
     deleteTransaction
   } from '~/lib/db';
-  import { basepath } from '~/lib/const';
   import { accounts } from '~/lib/store';
 
-  export let id: string;
-  export let tid: string = undefined;
+  export let params: { id: string; tid: string };
+  const { id, tid } = params;
+
+  // export let id: string;
+  // export let tid: string = undefined;
 
   $: account = $accounts.find((account) => account.id === id);
 
@@ -38,11 +40,11 @@
     // console.log('trans params:', e.detail.params);
     if (tid) {
       updateTransaction(transactionDoc, e.detail.params).then(() => {
-        navigate(`${basepath}/accounts/${id}`);
+        push(`/accounts/${id}`);
       });
     } else {
       createTransaction(e.detail.params).then(() => {
-        navigate(`${basepath}/accounts/${id}`);
+        push(`/accounts/${id}`);
       });
     }
   }
@@ -52,7 +54,7 @@
   <Header
     slot="header"
     title={account ? `${account.title}: Transaction` : 'Transaction'}
-    returnPath={`accounts/${id}`}
+    returnPath={`/accounts/${id}`}
     {menuItems}
     on:menu={(e) => {
       switch (e.detail.id) {
@@ -62,7 +64,7 @@
           }
           if (tid) {
             deleteTransaction(tid).then(() => {
-              navigate(`${basepath}/accounts/${id}`);
+              push(`/accounts/${id}`);
             });
           }
           break;
