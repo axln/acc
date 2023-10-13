@@ -6,7 +6,7 @@
   import { createCategory, updateCategory } from '~/lib/db';
   import { categoires } from '~/lib/store';
 
-  export let params: { id: string };
+  export let params: { id?: string } = {};
   const { id } = params;
 
   let categoryDoc = id ? $categoires.find((item) => item.id === id) : null;

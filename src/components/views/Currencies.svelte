@@ -5,7 +5,7 @@
   import { currencies } from '~/lib/store';
 
   function clickHandler(e: MouseEvent) {
-    console.log('e:', e);
+    // console.log('e:', e);
 
     if (e.target instanceof HTMLElement) {
       const item = e.target.closest('[data-role="item"]');

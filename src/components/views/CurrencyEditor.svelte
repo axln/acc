@@ -6,7 +6,7 @@
   import { createCurrency, updateCurrency } from '~/lib/db';
   import { currencies } from '~/lib/store';
 
-  export let params: { cid: string };
+  export let params: { cid?: string } = {};
   const { cid } = params;
 
   let currencyDoc = cid ? $currencies.find((item) => item.code === cid) : null;

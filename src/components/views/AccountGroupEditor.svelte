@@ -7,7 +7,7 @@
   import { accountGroups } from '~/lib/store';
   import { createAccountGroup, updateAccountGroup } from '~/lib/db';
 
-  export let params: { id: string };
+  export let params: { id?: string } = {};
   const { id } = params;
 
   let accountGroupDoc = id ? $accountGroups.find((item) => item.id === id) : null;

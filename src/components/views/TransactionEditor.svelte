@@ -13,11 +13,8 @@
   } from '~/lib/db';
   import { accounts } from '~/lib/store';
 
-  export let params: { id: string; tid: string };
+  export let params: { id: string; tid?: string };
   const { id, tid } = params;
-
-  // export let id: string;
-  // export let tid: string = undefined;
 
   $: account = $accounts.find((account) => account.id === id);
 

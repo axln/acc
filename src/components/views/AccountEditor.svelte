@@ -6,7 +6,7 @@
   import { createAccount, updateAccount } from '~/lib/db';
   import { accounts } from '~/lib/store';
 
-  export let params: { id: string };
+  export let params: { id?: string } = {};
   const { id } = params;
 
   let accountDoc = id ? $accounts.find((item) => item.id === id) : null;

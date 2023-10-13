@@ -21,7 +21,7 @@
 <header class="header">
   <div class="back">
     {#if returnPath}
-      <a class="link" href={returnPath} use:link><BackIcon /></a>
+      <a class="link" href={returnPath} use:link draggable={false}><BackIcon /></a>
     {/if}
   </div>
 
@@ -31,22 +31,21 @@
 
   <div class="buttons">
     {#if addPath}
-      <a class="link" href={addPath} use:link><PlusIcon /></a>
+      <a class="link" href={addPath} use:link draggable={false}><PlusIcon /></a>
     {/if}
 
     {#if menuItems}
       <DropDown class="dropdown" bind:this={dropDown}>
         <MenuIcon />
-        <svelte:fragment slot="content">
-          <Menu
-            items={menuItems}
-            on:menu={(e) => {
-              dropDown.close();
-              dispatch('menu', {
-                id: e.detail.id
-              });
-            }} />
-        </svelte:fragment>
+        <Menu
+          slot="content"
+          items={menuItems}
+          on:menu={(e) => {
+            dropDown.close();
+            dispatch('menu', {
+              id: e.detail.id
+            });
+          }} />
       </DropDown>
     {/if}
   </div>

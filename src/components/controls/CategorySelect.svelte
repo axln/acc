@@ -1,7 +1,7 @@
 <script lang="ts">
   import { categoires } from '~/lib/store';
 
-  export let categoryId: string;
+  export let categoryId: string | undefined;
 </script>
 
 <select class="select" bind:value={categoryId} class:placeholder={!categoryId}>

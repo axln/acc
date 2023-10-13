@@ -2,8 +2,8 @@
   import { createEventDispatcher, onMount } from 'svelte';
   import AccountSelect from '~/components/controls/AccountSelect.svelte';
   import CategorySelect from '~/components/controls/CategorySelect.svelte';
+  import KindSelect from './controls/KindSelect.svelte';
   import { TransactionKind, type TransactionDoc } from '~/lib/db';
-  import { transactionKinds } from '~/lib/const';
   import { accounts } from '~/lib/store';
   import {
     formatAmount,
@@ -11,9 +11,12 @@
     parseAmount,
     validateAmount
   } from '~/lib/utils';
+  import CategoryCombo from './controls/CategoryCombo.svelte';
 
   export let accountId: string;
   export let transactionDoc: TransactionDoc = null;
+
+  let categoryCombo: CategoryCombo;
 
   let amountInput: HTMLInputElement;
 
@@ -99,15 +102,16 @@
 
     return '';
   }
+
+  function clearHandler() {
+    // categoryId = '';
+    categoryCombo.clear();
+  }
 </script>
 
 <form class="form" on:submit|preventDefault={submitHandler}>
   <div>
-    <select class="select" bind:value={kind}>
-      {#each transactionKinds as kind}
-        <option value={kind.value}>{kind.title}</option>
-      {/each}
-    </select>
+    <KindSelect bind:kind />
   </div>
 
   <div>
@@ -118,14 +122,16 @@
     {#if kind === TransactionKind.Transfer}
       <AccountSelect bind:accountId={secondAccountId} placeholder="To" />
     {:else}
-      <div class="category">
+      <!-- <div class="category">
         <CategorySelect bind:categoryId />
-        <button
-          type="button"
-          disabled={!categoryId}
-          on:click|stopPropagation={() => {
-            categoryId = '';
-          }}>Clear</button>
+        <button type="button" disabled={!categoryId} on:click|stopPropagation={clearHandler}
+          >Clear</button>
+      </div>
+      <br /> -->
+      <div class="category">
+        <CategoryCombo bind:categoryId bind:this={categoryCombo} />
+        <button type="button" disabled={!categoryId} on:click|stopPropagation={clearHandler}
+          >Clear</button>
       </div>
     {/if}
   </div>
@@ -167,12 +173,6 @@
   .invalid {
     border: 1px solid red;
     color: red;
-  }
-
-  .select {
-    font-size: inherit;
-    padding: 5px;
-    width: 100%;
   }
 
   .input {

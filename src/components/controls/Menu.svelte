@@ -15,10 +15,10 @@
   const dispatch = createEventDispatcher();
 </script>
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions-->
 <ul class="menu">
   {#each items as item (item.id)}
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <!-- svelte-ignore a11y-no-noninteractive-element-interactions-->
     <li
       class="item"
       data-id={item.id}
@@ -26,7 +26,7 @@
         dispatch('menu', { id: event.currentTarget.dataset.id });
       }}>
       {#if item.to}
-        <a class="link" href={item.to} use:link>{item.title}</a>
+        <a class="link" href={item.to} use:link draggable={false}>{item.title}</a>
       {:else}
         <span class="text">{item.title}</span>
       {/if}

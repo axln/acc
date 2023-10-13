@@ -3,10 +3,15 @@
 
   let dropdown: HTMLDivElement;
   let className: string = undefined;
+  export let clickToggle = true;
   export { className as class };
 
   export function close() {
     dropdown.toggleAttribute('data-opened', false);
+  }
+
+  export function show() {
+    dropdown.toggleAttribute('data-opened', true);
   }
 </script>
 
@@ -15,13 +20,14 @@
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
     class="caption"
-    on:click={() => {
-      dropdown.toggleAttribute('data-opened');
-    }}>
+    on:click={clickToggle &&
+      (() => {
+        dropdown.toggleAttribute('data-opened');
+      })}>
     <slot />
   </div>
 
-  <div class="content">
+  <div class="content" data-role="dropdown-content">
     <slot name="content" />
   </div>
 </div>
@@ -56,7 +62,7 @@
 
   .dropdown {
     position: relative;
-    
+
     &[data-opened] {
       > .caption {
         color: #fff;
