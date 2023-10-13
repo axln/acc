@@ -78,6 +78,8 @@
       margin-top: 2px;
       padding: 0;
       border: 1px solid #aaa;
+      overflow-y: scroll;
+      max-height: 400px;
     }
   }
 
@@ -94,8 +96,8 @@
     margin: 0;
 
     li {
-      // line-height: 35px;
-      padding: 8px 5px;
+      line-height: 40px;
+      padding: 0 5px;
       cursor: pointer;
 
       &:hover {
