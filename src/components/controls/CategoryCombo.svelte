@@ -73,7 +73,7 @@
   .combo {
     width: 100%;
 
-    > [data-role='dropdown-content'] {
+    > [data-role='popover'] {
       left: 0;
       margin-top: 2px;
       padding: 0;

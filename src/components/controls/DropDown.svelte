@@ -27,7 +27,7 @@
     <slot />
   </div>
 
-  <div class="content" data-role="dropdown-content">
+  <div class="popover" data-role="popover">
     <slot name="content" />
   </div>
 </div>
@@ -49,7 +49,7 @@
     }
   }
 
-  .content {
+  .popover {
     display: none;
     position: absolute;
     background-color: #fff;
@@ -68,7 +68,7 @@
         color: #fff;
       }
 
-      > .content {
+      > .popover {
         display: block;
       }
     }
