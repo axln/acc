@@ -6,12 +6,12 @@ export const transactionKinds = [
     title: 'Expense'
   },
   {
-    value: TransactionKind.Income,
-    title: 'Income'
-  },
-  {
     value: TransactionKind.Transfer,
     title: 'Transfer'
+  },
+  {
+    value: TransactionKind.Income,
+    title: 'Income'
   }
 ];
 

@@ -5,8 +5,8 @@
   import TransactionForm from '~/components/TransactionForm.svelte';
   import {
     type TransactionDoc,
-    getTransaction,
     type TransactionParams,
+    getTransaction,
     createTransaction,
     updateTransaction,
     deleteTransaction

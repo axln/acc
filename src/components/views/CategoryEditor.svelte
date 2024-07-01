@@ -65,8 +65,7 @@
 <style lang="scss">
   .form {
     margin: 10px;
-
-    font-size: 1em;
+    font-size: 1rem;
   }
 
   .row {
