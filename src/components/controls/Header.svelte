@@ -60,6 +60,7 @@
     align-items: center;
     padding: 10px;
     background-color: cadetblue;
+    z-index: 1;
   }
 
   .title {
