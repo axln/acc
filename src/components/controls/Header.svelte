@@ -53,11 +53,13 @@
 
 <style lang="scss">
   .header {
-    padding: 10px;
-    background-color: cadetblue;
+    position: sticky;
+    top: 0;
+    color: #fff;
     display: flex;
     align-items: center;
-    color: #fff;
+    padding: 10px;
+    background-color: cadetblue;
   }
 
   .title {

@@ -1,5 +1,4 @@
-import type { IDBPDatabase, DBSchema } from 'idb';
-import { openDB } from 'idb';
+import { type IDBPDatabase, type DBSchema, openDB } from 'idb';
 import { nanoid } from 'nanoid';
 import { accountGroups, accounts, categoires, currencies, settings } from '~/lib/store';
 

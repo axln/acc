@@ -1,5 +1,6 @@
 <script lang="ts">
   import { accountGroups } from '~/lib/store';
+
   export let groupId: string;
 </script>
 
