@@ -26,8 +26,8 @@
 <style lang="scss">
   .category {
     padding: 10px;
-    border-bottom: 1px solid #eee;
-    border-top: 1px solid #eee;
+    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #ddd;
     cursor: pointer;
 
     & + & {

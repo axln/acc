@@ -33,7 +33,7 @@
   .currency {
     padding: 10px;
     display: flex;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #ddd;
     cursor: pointer;
 
     &:hover {

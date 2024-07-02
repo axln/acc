@@ -31,7 +31,7 @@
 <style lang="scss">
   .account {
     padding: 10px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #ddd;
 
     cursor: pointer;
 

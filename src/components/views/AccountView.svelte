@@ -85,7 +85,7 @@
   .day {
     padding: 0 10px;
     background-color: #f4f4f8;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #ddd;
     display: flex;
     gap: 10px;
   }

@@ -44,7 +44,7 @@
   .entry {
     padding: 5px 10px;
     cursor: pointer;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #ddd;
 
     &:hover {
       background-color: #e1effa;
@@ -63,7 +63,7 @@
 
   .details {
     font-size: 13px;
-    color: #aaa;
+    color: #ddd;
     margin-top: 5px;
   }
 
