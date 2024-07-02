@@ -180,6 +180,7 @@
     padding: 5px;
     width: 100%;
     outline: none;
+    border-width: 1px;
   }
 
   .button {
