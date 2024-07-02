@@ -161,7 +161,7 @@
   </div>
 
   <div>
-    <label>
+    <label class="reconciled">
       <input type="checkbox" bind:checked={reconciled} />
       Reconciled
     </label>
@@ -178,6 +178,10 @@
     > div + div {
       margin-top: 10px;
     }
+  }
+
+  .reconciled {
+    display: flex;
   }
 
   .invalid {
