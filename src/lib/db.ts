@@ -89,6 +89,7 @@ export interface EntryDoc {
   amount: number;
   total: number;
   comment: string;
+  reconciled?: boolean;
 }
 
 export interface SettingsDoc {
@@ -114,6 +115,7 @@ export interface TransactionDoc {
   secondEntryId?: string;
   secondAmount?: number;
   comment: string;
+  reconciled?: boolean;
 }
 
 export interface TransactionParams {
@@ -125,6 +127,7 @@ export interface TransactionParams {
   secondAccountId?: string;
   secondAmount?: number;
   comment: string;
+  reconciled?: boolean;
 }
 
 export let db: IDBPDatabase<AccDB>;
@@ -350,7 +353,8 @@ export function makeTransactionDocs(
     secondAccountId,
     secondAmount,
     amount,
-    comment
+    comment,
+    reconciled
   }: TransactionParams,
   transactionId: string,
   entryId: string,
@@ -364,7 +368,8 @@ export function makeTransactionDocs(
     transactionId,
     comment,
     amount: kind === TransactionKind.Income ? amount : -amount,
-    total: 0
+    total: 0,
+    ...(reconciled ? { reconciled } : {})
   };
 
   if (kind === TransactionKind.Transfer) {
@@ -375,7 +380,8 @@ export function makeTransactionDocs(
       transactionId,
       comment,
       amount: secondAmount || amount,
-      total: 0
+      total: 0,
+      ...(reconciled ? { reconciled } : {})
     };
 
     const transactionDoc: TransactionDoc = {
@@ -388,7 +394,8 @@ export function makeTransactionDocs(
       ...(secondAmount ? { secondAmount } : {}),
       comment,
       entryId: entryDoc.id,
-      secondEntryId: secondEntryDoc.id
+      secondEntryId: secondEntryDoc.id,
+      ...(reconciled ? { reconciled } : {})
     };
     return [transactionDoc, entryDoc, secondEntryDoc];
   } else {
@@ -400,7 +407,8 @@ export function makeTransactionDocs(
       ...(categoryId ? { categoryId } : {}),
       amount,
       comment,
-      entryId: entryDoc.id
+      entryId: entryDoc.id,
+      ...(reconciled ? { reconciled } : {})
     };
     return [transactionDoc, entryDoc];
   }

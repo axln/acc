@@ -1,9 +1,8 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from 'svelte';
   import AccountSelect from '~/components/controls/AccountSelect.svelte';
-  import CategorySelect from '~/components/controls/CategorySelect.svelte';
   import KindSelect from './controls/KindSelect.svelte';
-  import { TransactionKind, type TransactionDoc } from '~/lib/db';
+  import { TransactionKind, type TransactionDoc, type TransactionParams } from '~/lib/db';
   import { accounts } from '~/lib/store';
   import {
     formatAmount,
@@ -12,6 +11,7 @@
     validateAmount
   } from '~/lib/utils';
   import CategoryCombo from './controls/CategoryCombo.svelte';
+  import Account from './Account.svelte';
 
   export let accountId: string;
   export let transactionDoc: TransactionDoc = null;
@@ -31,7 +31,8 @@
     kind = TransactionKind.Expense,
     categoryId,
     secondAccountId,
-    comment = ''
+    comment = '',
+    reconciled = false
   } = transactionDoc || {};
 
   let timestamp = getLocalCustomISODateString(new Date(transactionDoc?.timestamp || Date.now()));
@@ -54,7 +55,7 @@
       return;
     }
 
-    const params =
+    const params: TransactionParams =
       kind === TransactionKind.Transfer
         ? {
             kind,
@@ -67,7 +68,8 @@
                 }
               : {}),
             amount: parseAmount(amount),
-            comment: comment.trim()
+            comment: comment.trim(),
+            ...(reconciled ? { reconciled: true } : {})
           }
         : {
             kind,
@@ -75,7 +77,8 @@
             accountId,
             categoryId: categoryId || null,
             amount: parseAmount(amount),
-            comment: comment.trim()
+            comment: comment.trim(),
+            ...(reconciled ? { reconciled: true } : {})
           };
 
     dispatch('save', { params });
@@ -155,6 +158,13 @@
 
   <div>
     <input class="input" type="text" bind:value={comment} placeholder="Comment" />
+  </div>
+
+  <div>
+    <label>
+      <input type="checkbox" bind:checked={reconciled} />
+      Reconciled
+    </label>
   </div>
 
   <div>

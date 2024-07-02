@@ -17,6 +17,7 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
   class="entry"
+  class:reconciled={entry.reconciled}
   on:click={() => {
     dispatch('transaction', { id: entry.transactionId });
   }}>
@@ -52,6 +53,14 @@
 
     &:active {
       background-color: #d1e3f0;
+    }
+  }
+
+  .reconciled {
+    background-color: #e8ffe0;
+
+    .details {
+      color: #999;
     }
   }
 
