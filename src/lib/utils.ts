@@ -43,10 +43,10 @@ export function formatDate(timestamp: number) {
   const offset = date.getTimezoneOffset() * 60000; // Convert to milliseconds
   const localTime = new Date(date.getTime() - offset);
 
-  const year = localTime.getFullYear();
+  const year = localTime.getUTCFullYear();
   const month = String(localTime.getUTCMonth() + 1).padStart(2, '0');
   const day = String(localTime.getUTCDate()).padStart(2, '0');
-  const weekDay = weekDays[date.getUTCDay()];
+  const weekDay = weekDays[localTime.getUTCDay()];
 
   return `${year}-${month}-${day} ${weekDay}`;
 }
