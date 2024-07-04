@@ -44,7 +44,7 @@
         return acc;
       }, 0);
     }
-    console.log('entriesByDays:', entriesByDays);
+    // console.log('entriesByDays:', entriesByDays);
   });
 
   $: account = $accounts.find((item) => item.id === id);
