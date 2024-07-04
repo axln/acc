@@ -159,14 +159,16 @@ export function safeJSONParse(text: string) {
 }
 
 export async function getDBSnapshot(): Promise<DBSnapshot> {
-  const [currencies, accountGroups, accounts, categories, transactions, entries] =
+  const [currencies, accountGroups, accounts, categories, transactions, entries, settings, rates] =
     await Promise.all([
       getCurrencies(),
       getAccountGroups(),
       getAccounts(),
       getCategories(),
       db.getAll('transactions'),
-      db.getAll('entries')
+      db.getAll('entries'),
+      db.getAll('settings'),
+      db.getAll('rates')
     ]);
 
   return {
@@ -176,7 +178,9 @@ export async function getDBSnapshot(): Promise<DBSnapshot> {
     accounts,
     categories,
     transactions,
-    entries
+    entries,
+    settings,
+    rates
   };
 }
 
@@ -187,7 +191,16 @@ export async function restoreSnapshot(snapshot: DBSnapshot) {
 
   if (validateDBSnapshot(snapshot)) {
     const tx = db.transaction(
-      ['currencies', 'accountGroups', 'accounts', 'categories', 'transactions', 'entries'],
+      [
+        'currencies',
+        'accountGroups',
+        'accounts',
+        'categories',
+        'transactions',
+        'entries',
+        'settings',
+        'rates'
+      ],
       'readwrite'
     );
 
@@ -197,7 +210,9 @@ export async function restoreSnapshot(snapshot: DBSnapshot) {
       tx.objectStore('accounts').clear(),
       tx.objectStore('categories').clear(),
       tx.objectStore('transactions').clear(),
-      tx.objectStore('entries').clear()
+      tx.objectStore('entries').clear(),
+      tx.objectStore('settings').clear(),
+      tx.objectStore('rates').clear()
     ]);
 
     for (const item of snapshot.currencies) {
@@ -217,6 +232,12 @@ export async function restoreSnapshot(snapshot: DBSnapshot) {
     }
     for (const item of snapshot.entries) {
       await tx.objectStore('entries').put(item);
+    }
+    for (const item of snapshot.settings) {
+      await tx.objectStore('settings').put(item);
+    }
+    for (const item of snapshot.rates) {
+      await tx.objectStore('rates').put(item);
     }
 
     await tx.done;

@@ -67,6 +67,8 @@ export interface DBSnapshot {
   categories: CategoryDoc[];
   transactions: TransactionDoc[];
   entries: EntryDoc[];
+  rates: RateDoc[];
+  settings: SettingsDoc[];
 }
 
 export interface AccountDoc {
