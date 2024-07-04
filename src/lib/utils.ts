@@ -1,13 +1,14 @@
-import { currencyRates } from './const';
+import { get } from 'svelte/store';
 import {
-  getCurrencies,
   type AccountDoc,
   type DBSnapshot,
+  getCurrencies,
   getAccountGroups,
   db,
   getAccounts,
   getCategories
 } from './db';
+import { rates, baseCurrencyCode } from './store';
 
 const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
@@ -89,11 +90,15 @@ export function formatAmount(value: number, sep?: boolean, plus?: boolean) {
   );
 }
 
-export function getCurrencyRate(currencyCode: string, baseCurrencyCode: string) {
-  if (currencyRates[currencyCode]?.[baseCurrencyCode]) {
-    return currencyRates[currencyCode]?.[baseCurrencyCode];
+export function getCurrencyRate(fromCode: string, toCode: string) {
+  const rateValues = get(rates);
+  const baseCode = get(baseCurrencyCode);
+  const baseRate = rateValues[fromCode] ? rateValues[fromCode] : 1;
+  if (toCode === baseCode) {
+    return baseRate;
+  } else {
+    return rateValues[toCode] ? baseRate / rateValues[toCode] : 1;
   }
-  return NaN;
 }
 
 function numberWithSep(x: number, sep = ' ') {

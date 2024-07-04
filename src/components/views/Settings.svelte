@@ -2,7 +2,7 @@
   import { push } from 'svelte-spa-router';
   import View from '~/components/controls/View.svelte';
   import Header from '~/components/controls/Header.svelte';
-  import CurrencySelect from '../controls/CurrencySelect.svelte';
+  import CurrencySelect from '~/components/controls/CurrencySelect.svelte';
   import { settings } from '~/lib/store';
   import { updateSettings } from '~/lib/db';
   import { baseCurrencyName } from '~/lib/const';
@@ -18,6 +18,7 @@
 
 <View>
   <Header slot="header" title="Settings" returnPath="/" />
+  
   <form class="form" on:submit|preventDefault={submitHandler}>
     <div>
       Base currency:
@@ -25,7 +26,7 @@
     </div>
 
     <div>
-      <button type="submit" class="button">Save</button>
+      <button class="button" type="submit">Save</button>
     </div>
   </form>
 </View>

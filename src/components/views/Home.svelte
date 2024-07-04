@@ -11,13 +11,9 @@
     safeJSONParse,
     restoreSnapshot
   } from '~/lib/utils';
-  import { accountGroups, accounts, currencies, settings } from '~/lib/store';
+  import { accountGroups, accounts, baseCurrencyCode } from '~/lib/store';
   import { getDBSnapshot } from '~/lib/utils';
   import { loadData } from '~/lib/db';
-  import { baseCurrencyName } from '~/lib/const';
-
-  $: baseCurrency =
-    $settings.find((item) => item.name === baseCurrencyName)?.value || $currencies[0]?.code;
 
   const menuItems = [
     {
@@ -36,25 +32,30 @@
       to: '/currencies'
     },
     {
+      id: 'rates',
+      title: 'Rates',
+      to: '/rates'
+    },
+    {
       id: 'backup',
       title: 'Backup'
     },
     {
       id: 'restore',
       title: 'Restore'
-    },
-    {
+    }
+    /* {
       id: 'settings',
       title: 'Settings',
       to: '/settings'
-    }
+    } */
   ];
 
   $: total = $accounts.reduce((total, acc) => {
-    if (acc.currencyCode === baseCurrency) {
+    if (acc.currencyCode === $baseCurrencyCode) {
       total += acc.balance;
     } else {
-      total += acc.balance * getCurrencyRate(acc.currencyCode, baseCurrency);
+      total += acc.balance * getCurrencyRate(acc.currencyCode, $baseCurrencyCode);
     }
 
     return total;
@@ -94,9 +95,10 @@
   {#each $accountGroups as accountGroup}
     <AccountGroup {accountGroup} />
   {/each}
+
   <div class="total">
     <div>Total</div>
-    <div class="amount">{formatAmount(total, true)} {baseCurrency || ''}</div>
+    <div class="amount">{formatAmount(total, true)} {$baseCurrencyCode || ''}</div>
   </div>
 </View>
 

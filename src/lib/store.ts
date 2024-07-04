@@ -6,3 +6,5 @@ export const accountGroups = writable<AccountGroupDoc[]>([]);
 export const categoires = writable<CategoryDoc[]>([]);
 export const currencies = writable<CurrencyDoc[]>([]);
 export const settings = writable<SettingsDoc[]>([]);
+export const baseCurrencyCode = writable<string>('');
+export const rates = writable<Record<string, number>>({});

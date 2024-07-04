@@ -1,6 +1,16 @@
 import { type IDBPDatabase, type DBSchema, openDB } from 'idb';
 import { nanoid } from 'nanoid';
-import { accountGroups, accounts, categoires, currencies, settings } from '~/lib/store';
+import { TransactionKind } from '~/lib/enum';
+import {
+  accountGroups,
+  accounts,
+  categoires,
+  currencies,
+  rates,
+  settings,
+  baseCurrencyCode
+} from '~/lib/store';
+import { baseCurrencyName } from './const';
 
 interface AccDB extends DBSchema {
   accounts: {
@@ -20,6 +30,10 @@ interface AccDB extends DBSchema {
   currencies: {
     key: string;
     value: CurrencyDoc;
+  };
+  rates: {
+    key: string;
+    value: RateDoc;
   };
   categories: {
     key: string;
@@ -74,6 +88,11 @@ export interface CurrencyDoc {
   title: string;
 }
 
+export interface RateDoc {
+  code: string;
+  rate: number;
+}
+
 export interface CategoryDoc {
   id: string;
   title: string;
@@ -95,12 +114,6 @@ export interface EntryDoc {
 export interface SettingsDoc {
   name: string;
   value: string;
-}
-
-export enum TransactionKind {
-  Expense = 'EXPENSE',
-  Income = 'INCOME',
-  Transfer = 'TRANSFER'
 }
 
 export interface TransactionDoc {
@@ -132,7 +145,7 @@ export interface TransactionParams {
 
 export let db: IDBPDatabase<AccDB>;
 
-const dbPromise = openDB<AccDB>('acc', 1, {
+const dbPromise = openDB<AccDB>('acc', 2, {
   upgrade(upgradeDb) {
     if (!upgradeDb.objectStoreNames.contains('accountGroups')) {
       const accountGroupsStore = upgradeDb.createObjectStore('accountGroups', { keyPath: 'id' });
@@ -164,6 +177,10 @@ const dbPromise = openDB<AccDB>('acc', 1, {
 
     if (!upgradeDb.objectStoreNames.contains('settings')) {
       upgradeDb.createObjectStore('settings', { keyPath: 'name' });
+    }
+
+    if (!upgradeDb.objectStoreNames.contains('rates')) {
+      upgradeDb.createObjectStore('rates', { keyPath: 'code' });
     }
   }
 }).then((dbInstance) => {
@@ -259,6 +276,14 @@ export function getSettings() {
   return db.getAll('settings');
 }
 
+export async function getRates(): Promise<Record<string, number>> {
+  const rateDocs = await db.getAll('rates');
+  return rateDocs.reduce((acc, rateDoc) => {
+    acc[rateDoc.code] = rateDoc.rate;
+    return acc;
+  }, {});
+}
+
 export async function getEntries(accountId: string, reverse = true) {
   const entryDocs = await db.getAllFromIndex('entries', 'accountId', accountId);
   return entryDocs.sort((a, b) => {
@@ -314,7 +339,18 @@ export async function createCategory(title: string, subtitle: string) {
 
 export async function updateSettings(settingsDoc: SettingsDoc) {
   await db.put('settings', settingsDoc);
-  settings.set(await getSettings());
+}
+
+export async function updateRates(rateDocs: RateDoc[], baseCurrencyCode: string) {
+  const newRates: Record<string, number> = {};
+  await db.delete('rates', baseCurrencyCode);
+  await Promise.all(
+    rateDocs.map((doc) => {
+      newRates[doc.code] = doc.rate;
+      return db.put('rates', doc);
+    })
+  );
+  rates.set(newRates);
 }
 
 export async function updateCategory(categoryDoc: CategoryDoc) {
@@ -468,13 +504,14 @@ export async function renameAccount(id: string, title: string) {
 }
 
 export async function loadData() {
-  const [accountsDocs, accountGroupDocs, categoryDocs, currencyDocs, settingsDocs] =
+  const [accountsDocs, accountGroupDocs, categoryDocs, currencyDocs, settingsDocs, savedRates] =
     await Promise.all([
       getAccounts(),
       getAccountGroups(),
       getCategories(),
       getCurrencies(),
-      getSettings()
+      getSettings(),
+      getRates()
     ]);
 
   currencies.set(currencyDocs);
@@ -482,6 +519,29 @@ export async function loadData() {
   accounts.set(accountsDocs);
   categoires.set(categoryDocs);
   settings.set(settingsDocs);
+  const baseCode = getBaseCurrency(settingsDocs);
+  baseCurrencyCode.set(baseCode);
+  delete savedRates[baseCode];
+  rates.set(savedRates);
+
+  /* 
+  console.log('RUB in USD:', getCurrencyRate('USD', 'RUB'));
+  console.log('USD in RUB:', getCurrencyRate('RUB', 'USD'));
+  console.log('RUB in KZT:', getCurrencyRate('KZT', 'RUB'));
+  console.log('KZT in RUB:', getCurrencyRate('RUB', 'KZT'));
+  console.log('USD in KZT:', getCurrencyRate('KZT', 'USD'));
+  console.log('KZT in USD:', getCurrencyRate('USD', 'KZT')); 
+  */
+}
+
+export function getBaseCurrency(settingDocs: SettingsDoc[]) {
+  for (const settingsDoc of settingDocs) {
+    if (settingsDoc.name === baseCurrencyName) {
+      return settingsDoc.value;
+    }
+  }
+
+  return '';
 }
 
 async function initData() {

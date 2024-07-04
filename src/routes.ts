@@ -6,6 +6,7 @@ import AccountView from '~/components/views/AccountView.svelte';
 import Categoies from '~/components/views/Categoies.svelte';
 import Settings from '~/components/views/Settings.svelte';
 import Currencies from '~/components/views/Currencies.svelte';
+import Rates from '~/components/views/Rates.svelte';
 import CategoryEditor from '~/components/views/CategoryEditor.svelte';
 import CurrencyEditor from '~/components/views/CurrencyEditor.svelte';
 import TransactionEditor from '~/components/views/TransactionEditor.svelte';
@@ -25,6 +26,7 @@ export const routes = {
   '/categories/new': CategoryEditor,
   '/categories/:id': CategoryEditor,
   '/currencies': Currencies,
+  '/rates': Rates,
   '/currencies/new': CurrencyEditor,
   '/currencies/:cid': CurrencyEditor,
   '/settings': Settings,

@@ -1,8 +1,9 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from 'svelte';
+  import type { TransactionDoc, TransactionParams } from '~/lib/db';
   import AccountSelect from '~/components/controls/AccountSelect.svelte';
   import KindSelect from './controls/KindSelect.svelte';
-  import { TransactionKind, type TransactionDoc, type TransactionParams } from '~/lib/db';
+  import { TransactionKind } from '~/lib/enum';
   import { accounts } from '~/lib/store';
   import {
     formatAmount,
@@ -11,7 +12,6 @@
     validateAmount
   } from '~/lib/utils';
   import CategoryCombo from './controls/CategoryCombo.svelte';
-  import Account from './Account.svelte';
 
   export let accountId: string;
   export let transactionDoc: TransactionDoc = null;
@@ -152,7 +152,7 @@
   {#if secondCurrency}
     <div>
       Amount, {secondAccount?.currencyCode}:
-      <input class="input" type="string" bind:value={secondAmount} />
+      <input class="input" type="text" bind:value={secondAmount} />
     </div>
   {/if}
 
@@ -193,8 +193,9 @@
     font-size: inherit;
     padding: 5px;
     width: 100%;
+    border: 1px solid #777;
     outline: none;
-    border-width: 1px;
+    border-radius: 3px;
   }
 
   .button {
