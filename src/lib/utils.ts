@@ -64,16 +64,20 @@ export function formatTime(timestamp: number) {
 }
 
 export function validateAmount(value: string) {
-  return /^[1-9]\d*([.,]\d{1,2})?$/.test(value);
+  return /^[1-9]\d*([.,](\d{1,2})?)?$/.test(value);
 }
 
 export function parseAmount(value: string): number {
   if (/[.,]/.test(value)) {
     let [whole, decimal] = value.split(/[.,]/);
-    if (decimal.length === 1) {
-      decimal = decimal + '0';
+    if (decimal.trim() === '') {
+      return parseInt(whole) * 100;
+    } else {
+      if (decimal.length === 1) {
+        decimal = decimal + '0';
+      }
+      return parseInt(whole + decimal);
     }
-    return parseInt(whole + decimal);
   } else {
     return parseInt(value) * 100;
   }

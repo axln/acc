@@ -12,6 +12,7 @@
     validateAmount
   } from '~/lib/utils';
   import CategoryCombo from './controls/CategoryCombo.svelte';
+  import Keyboard from './controls/Keyboard.svelte';
 
   export let accountId: string;
   export let transactionDoc: TransactionDoc = null;
@@ -22,7 +23,7 @@
 
   onMount(() => {
     if (amountInput) {
-      amountInput.focus();
+      // amountInput.focus();
       // amountInput.setSelectionRange(0, amountInput.value.length);
     }
   });
@@ -110,6 +111,15 @@
     // categoryId = '';
     categoryCombo.clear();
   }
+
+  function onkey(k: string) {
+    console.log('key:', k);
+    if (k === '<') {
+      amount = amount.substring(0, amount.length - 1);
+    } else {
+      amount += k;
+    }
+  }
 </script>
 
 <form class="form" on:submit|preventDefault={submitHandler}>
@@ -167,8 +177,10 @@
     </label>
   </div>
 
+  <Keyboard {onkey} />
+
   <div>
-    <button class="button" type="submit">{transactionDoc ? 'Save' : 'Create'}</button>
+    <button class="button submit" type="submit">{transactionDoc ? 'Save' : 'Create'}</button>
   </div>
 </form>
 
@@ -202,6 +214,11 @@
     width: 100%;
     padding: 5px;
     font-size: inherit;
+
+    &.submit {
+      padding: 10px;
+      margin-top: 10px;
+    }
   }
 
   .category {
