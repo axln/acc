@@ -27,6 +27,11 @@
       to: '/categories'
     },
     {
+      id: 'report',
+      title: 'Report',
+      to: '/report'
+    },
+    {
       id: 'currency',
       title: 'Currencies',
       to: '/currencies'
@@ -98,7 +103,10 @@
 
   <div class="total">
     <div>Total</div>
-    <div class="amount">{formatAmount(total, true)} {$baseCurrencyCode || ''}</div>
+    <div class="amount">
+      {formatAmount(total, true)}
+      {$baseCurrencyCode || ''}
+    </div>
   </div>
 </View>
 

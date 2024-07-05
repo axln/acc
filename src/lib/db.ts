@@ -52,6 +52,9 @@ interface AccDB extends DBSchema {
   transactions: {
     key: string;
     value: TransactionDoc;
+    indexes: {
+      timestamp: number;
+    };
   };
   settings: {
     key: string;
@@ -147,8 +150,8 @@ export interface TransactionParams {
 
 export let db: IDBPDatabase<AccDB>;
 
-const dbPromise = openDB<AccDB>('acc', 2, {
-  upgrade(upgradeDb) {
+const dbPromise = openDB<AccDB>('acc', 3, {
+  upgrade(upgradeDb, oldVer, newVer, tx) {
     if (!upgradeDb.objectStoreNames.contains('accountGroups')) {
       const accountGroupsStore = upgradeDb.createObjectStore('accountGroups', { keyPath: 'id' });
       accountGroupsStore.createIndex('title', 'title');
@@ -174,7 +177,12 @@ const dbPromise = openDB<AccDB>('acc', 2, {
     }
 
     if (!upgradeDb.objectStoreNames.contains('transactions')) {
-      upgradeDb.createObjectStore('transactions', { keyPath: 'id' });
+      const transactionsStore = upgradeDb.createObjectStore('transactions', { keyPath: 'id' });
+      transactionsStore.createIndex('timestamp', 'timestamp');
+    } else {
+      const transactionsStore = tx.objectStore('transactions');
+      console.log('store already exists, creating index');
+      transactionsStore.createIndex('timestamp', 'timestamp');
     }
 
     if (!upgradeDb.objectStoreNames.contains('settings')) {
@@ -297,6 +305,15 @@ export async function getEntries(accountId: string, reverse = true) {
       return 0;
     }
   });
+}
+
+export async function getTransactions(start: number, end: number) {
+  const transactionDocs = await db.getAllFromIndex(
+    'transactions',
+    'timestamp',
+    IDBKeyRange.bound(start, end, false, true)
+  );
+  return transactionDocs;
 }
 
 export function getTransaction(id: string) {

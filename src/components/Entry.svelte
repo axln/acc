@@ -25,8 +25,9 @@
     <div class="comment">
       <span class="title">{entry.comment}</span>
       {#if category}
-        <span class="category"
-          >{category.title}{category.subtitle ? `:${category.subtitle}` : ''}</span>
+        <span class="category">
+          {category.title}{category.subtitle ? `:${category.subtitle}` : ''}
+        </span>
       {/if}
     </div>
 
