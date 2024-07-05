@@ -227,6 +227,11 @@
         padding: 0;
         align-items: center;
 
+        border-top: none;
+        border-bottom: 1px solid #ddd;
+        position: sticky;
+        top: 0;
+
         h2 {
           margin: 0px 10px;
           font-size: 16px;
@@ -247,11 +252,7 @@
 
   .transaction {
     padding: 5px 10px;
-    border-top: 1px solid #ddd;
-
-    &:last-child {
-      border-bottom: 1px solid #ddd;
-    }
+    border-bottom: 1px solid #ddd;
 
     > .top {
       display: flex;
