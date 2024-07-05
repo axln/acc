@@ -260,6 +260,7 @@
       display: flex;
       > .amount {
         margin-left: auto;
+        white-space: nowrap;
       }
     }
 
