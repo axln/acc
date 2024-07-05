@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from 'svelte';
-  import type { TransactionDoc, TransactionParams } from '~/lib/db';
+  import { createCategory, type TransactionDoc, type TransactionParams } from '~/lib/db';
   import AccountSelect from '~/components/controls/AccountSelect.svelte';
   import KindSelect from './controls/KindSelect.svelte';
   import { TransactionKind } from '~/lib/enum';
@@ -13,6 +13,7 @@
   } from '~/lib/utils';
   import CategoryCombo from './controls/CategoryCombo.svelte';
   import Keyboard from './controls/Keyboard.svelte';
+  import { categoires } from '~/lib/store';
 
   export let accountId: string;
   export let transactionDoc: TransactionDoc = null;
@@ -20,6 +21,9 @@
   let categoryCombo: CategoryCombo;
 
   let amountInput: HTMLInputElement;
+  let categoryValue: string;
+
+  // $: console.log('categoryValue:', categoryValue);
 
   onMount(() => {
     if (amountInput) {
@@ -49,11 +53,23 @@
 
   const dispatch = createEventDispatcher();
 
-  function submitHandler() {
+  async function submitHandler() {
     const validationError = validateFields();
     if (validationError) {
       alert(validationError);
       return;
+    }
+    if (!categoryId && categoryValue.trim() !== '') {
+      const [title, subtitle = ''] = categoryValue.trim().split(':');
+
+      const existingCat = $categoires.find(
+        (cat) => cat.title === title && cat.subtitle === subtitle
+      );
+      if (!existingCat) {
+        const cat = await createCategory(title, subtitle);
+        // console.log('new cat added:', cat);
+        categoryId = cat.id;
+      }
     }
 
     const params: TransactionParams =
@@ -142,7 +158,7 @@
       </div>
       <br /> -->
       <div class="category">
-        <CategoryCombo bind:categoryId bind:this={categoryCombo} />
+        <CategoryCombo bind:categoryId bind:this={categoryCombo} bind:value={categoryValue} />
         <button type="button" disabled={!categoryId} on:click|stopPropagation={clearHandler}
           >Clear</button>
       </div>

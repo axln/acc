@@ -18,7 +18,7 @@
   }
 
   let category = categoryId ? $categoires.find((cat) => cat.id === categoryId) : null;
-  let value = category ? getCategoryTitle(category) : '';
+  export let value = category ? getCategoryTitle(category) : '';
 
   function clickHandler(e: Event) {
     if (e.target instanceof HTMLLIElement) {

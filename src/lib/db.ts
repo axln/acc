@@ -348,12 +348,14 @@ export async function createAccount(title: string, groupId: string, currencyCode
 }
 
 export async function createCategory(title: string, subtitle: string) {
-  await db.put('categories', {
+  const cat = {
     id: nanoid(5),
     title,
     subtitle
-  });
+  };
+  await db.put('categories', cat);
   categoires.set(await getCategories());
+  return cat;
 }
 
 export async function updateSettings(settingsDoc: SettingsDoc) {
