@@ -261,6 +261,7 @@
       > .amount {
         margin-left: auto;
         white-space: nowrap;
+        flex: 0 0 auto;
       }
     }
 
