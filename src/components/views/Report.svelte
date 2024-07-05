@@ -100,6 +100,8 @@
 
   function ondocs(d: TransactionDoc[]) {
     docs = d;
+
+    document.documentElement.style.setProperty('overflow', 'hidden');
   }
 </script>
 
@@ -137,6 +139,7 @@
             class="close"
             on:click={(e) => {
               docs = null;
+              document.documentElement.style.removeProperty('overflow');
             }}>X</button>
         </div>
 
@@ -208,7 +211,6 @@
     background-color: #8885;
 
     padding: 10px;
-    overflow: auto;
     display: flex;
     align-items: stretch;
 
