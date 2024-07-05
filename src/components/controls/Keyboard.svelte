@@ -26,11 +26,11 @@
     <span data-key="9">9</span>
   </div>
   <div>
-    <span data-key=".">.</span>
-    <span data-key="0">0</span>
     <span data-key="<">
       <BackspaceIcon size={24} />
     </span>
+    <span data-key="0">0</span>
+    <span data-key=".">.</span>
   </div>
 </div>
 
