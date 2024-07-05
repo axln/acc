@@ -9,7 +9,7 @@
   }
 </script>
 
-<div class="keyboard" on:pointerdown|preventDefault={onkeydown}>
+<div class="keyboard" on:pointerdown|preventDefault on:pointerup={onkeydown}>
   <div>
     <span data-key="1">1</span>
     <span data-key="2">2</span>

@@ -113,7 +113,7 @@
   }
 
   function onkey(k: string) {
-    console.log('key:', k);
+    // console.log('key:', k);
     if (k === '<') {
       amount = amount.substring(0, amount.length - 1);
     } else {
