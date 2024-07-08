@@ -59,7 +59,7 @@
       alert(validationError);
       return;
     }
-    if (!categoryId && categoryValue.trim() !== '') {
+    if (kind !== TransactionKind.Transfer && !categoryId && categoryValue.trim() !== '') {
       const [title, subtitle = ''] = categoryValue.trim().split(':');
 
       const existingCat = $categoires.find(
