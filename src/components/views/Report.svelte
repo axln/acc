@@ -4,9 +4,14 @@
   import Header from '~/components/controls/Header.svelte';
   import ReportCat from '~/components/controls/ReportCat.svelte';
   import { TransactionKind } from '~/lib/enum';
-  import { type CategoryDoc, type TransactionDoc, getTransactions } from '~/lib/db';
-  import { categoires } from '~/lib/store';
-  import { formatAmount, formatTimestamp } from '~/lib/utils';
+  import {
+    type CategoryDoc,
+    type AccountDoc,
+    type TransactionDoc,
+    getTransactions
+  } from '~/lib/db';
+  import { categoires, accounts, baseCurrencyCode } from '~/lib/store';
+  import { formatAmount, formatTimestamp, getCurrencyRate } from '~/lib/utils';
 
   const now = new Date();
   let monthYear = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}`;
@@ -17,6 +22,11 @@
   let docs: TransactionDoc[] | null = null;
 
   const categoryHash = $categoires.reduce((acc, item) => {
+    acc[item.id] = item;
+    return acc;
+  }, {});
+
+  const accountHash = $accounts.reduce((acc, item) => {
     acc[item.id] = item;
     return acc;
   }, {});
@@ -58,7 +68,7 @@
               total: 0
             };
           }
-          acc.cats[cat.title].total += doc.amount;
+          acc.cats[cat.title].total += amountInBaseCurrency(doc);
           acc.cats[cat.title].docs.push(doc);
           if (cat.subtitle) {
             if (!acc.cats[cat.title].cats[cat.subtitle]) {
@@ -68,11 +78,14 @@
                 total: 0
               };
             }
-            acc.cats[cat.title].cats[cat.subtitle].total += doc.amount;
+            acc.cats[cat.title].cats[cat.subtitle].total += amountInBaseCurrency(doc);
             acc.cats[cat.title].cats[cat.subtitle].docs.push(doc);
           }
         }
-        acc.total += doc.amount;
+        // console.log('acc id:', accountHash[doc.accountId]);
+
+        acc.total += amountInBaseCurrency(doc);
+
         // acc.docs.push(doc);
         return acc;
       },
@@ -102,6 +115,15 @@
     docs = d;
 
     document.documentElement.style.setProperty('overflow', 'hidden');
+  }
+
+  function amountInBaseCurrency(doc: TransactionDoc) {
+    const accountDoc = accountHash[doc.accountId];
+    if (accountDoc && accountDoc.currencyCode !== $baseCurrencyCode) {
+      return doc.amount * getCurrencyRate(accountDoc.currencyCode, $baseCurrencyCode);
+    } else {
+      return doc.amount;
+    }
   }
 </script>
 
@@ -153,6 +175,8 @@
                   true,
                   true
                 )}</span>
+              &nbsp;
+              <span>{accountHash[doc.accountId]?.currencyCode}</span>
             </div>
 
             <div class="bottom">

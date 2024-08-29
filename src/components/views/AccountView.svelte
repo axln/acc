@@ -91,6 +91,7 @@
   }
   .date {
     flex: 1 1 auto;
+    font-weight: bold;
   }
   .total {
     flex: 0 0 auto;
