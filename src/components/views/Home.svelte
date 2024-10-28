@@ -77,7 +77,7 @@
       switch (e.detail.id) {
         case 'backup':
           getDBSnapshot().then((backup) => {
-            downloadJSON(backup, `${formatTimestamp(Date.now())}.json`);
+            downloadJSON(backup, `acc-${formatTimestamp(Date.now())}.json`);
           });
           break;
 
