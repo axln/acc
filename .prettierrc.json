@@ -3,5 +3,6 @@
   "trailingComma": "none",
   "arrowParens": "always",
   "printWidth": 100,
-  "bracketSameLine": true
+  "bracketSameLine": true,
+  "plugins": ["prettier-plugin-svelte"]
 }

@@ -1,20 +1,4 @@
-<script lang="ts">
-  import Header from '~/components/controls/Header.svelte';
-  import View from '~/components/controls/View.svelte';
-  import AccountGroup from '~/components/AccountGroup.svelte';
-  import {
-    downloadJSON,
-    formatAmount,
-    getCurrencyRate,
-    formatTimestamp,
-    chooseTextFile,
-    safeJSONParse,
-    restoreSnapshot
-  } from '~/lib/utils';
-  import { accountGroups, accounts, baseCurrencyCode } from '~/lib/store';
-  import { getDBSnapshot } from '~/lib/utils';
-  import { loadData } from '~/lib/db';
-
+<script module lang="ts">
   const menuItems = [
     {
       id: 'groups',
@@ -55,6 +39,24 @@
       to: '/settings'
     } */
   ];
+</script>
+
+<script lang="ts">
+  import Header from '~/components/controls/Header.svelte';
+  import View from '~/components/controls/View.svelte';
+  import AccountGroup from '~/components/AccountGroup.svelte';
+  import {
+    downloadJSON,
+    formatAmount,
+    getCurrencyRate,
+    formatTimestamp,
+    chooseTextFile,
+    safeJSONParse,
+    restoreSnapshot
+  } from '~/lib/utils';
+  import { accountGroups, accounts, baseCurrencyCode } from '~/lib/store';
+  import { getDBSnapshot } from '~/lib/utils';
+  import { loadData } from '~/lib/db';
 
   $: total = $accounts.reduce((total, acc) => {
     if (acc.currencyCode === $baseCurrencyCode) {
