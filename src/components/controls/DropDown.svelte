@@ -2,7 +2,7 @@
   import { autoClose } from '~/lib/autoClose';
 
   let dropdown: HTMLDivElement;
-  let className: string = undefined;
+  let className: string | undefined = undefined;
   export let clickToggle = true;
   export { className as class };
 
@@ -20,10 +20,11 @@
   <!-- svelte-ignore a11y-no-static-element-interactions -->
   <div
     class="caption"
-    on:click={clickToggle &&
-      (() => {
-        dropdown.toggleAttribute('data-opened');
-      })}>
+    onclick={clickToggle
+      ? () => {
+          dropdown.toggleAttribute('data-opened');
+        }
+      : null}>
     <slot />
   </div>
 
@@ -33,8 +34,6 @@
 </div>
 
 <style lang="scss">
-  $border-radius: 3px;
-
   .caption {
     display: flex;
     align-items: center;
@@ -55,8 +54,11 @@
     background-color: #fff;
     right: 0;
     padding: 5px 0;
-    border-radius: $border-radius;
-    box-shadow: 0 1px 3px rgb(0 0 0 / 6%), 0 2px 6px rgb(0 0 0 / 6%), 0 3px 8px rgb(0 0 0 / 9%);
+    border-radius: 3px;
+    box-shadow:
+      0 1px 3px rgb(0 0 0 / 6%),
+      0 2px 6px rgb(0 0 0 / 6%),
+      0 3px 8px rgb(0 0 0 / 9%);
     user-select: none;
   }
 

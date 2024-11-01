@@ -9,9 +9,9 @@
   import MenuIcon from '~/components/icons/MenuIcon.svelte';
 
   export let title: string;
-  export let returnPath: string = undefined;
-  export let addPath: string = undefined;
-  export let menuItems: MenuItem[] = null;
+  export let returnPath: string | undefined = undefined;
+  export let addPath: string | undefined = undefined;
+  export let menuItems: MenuItem[] | null = null;
 
   let dropDown: any = null;
 

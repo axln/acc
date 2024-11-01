@@ -2,14 +2,22 @@ import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+// @ts-ignore
 import { cssModules } from 'svelte-preprocess-cssmodules';
 
-// https://vitejs.dev/config/
+// https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   return {
     resolve: {
       alias: {
         '~': resolve(__dirname, 'src')
+      }
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler' // or "modern"
+        }
       }
     },
     plugins: [

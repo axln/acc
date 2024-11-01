@@ -214,6 +214,10 @@ export async function updateAccount(accountDoc: AccountDoc) {
 
 export async function deleteTransaction(id: string) {
   const transactionDoc = await db.get('transactions', id);
+  if (!transactionDoc) {
+    return;
+  }
+
   await Promise.all([
     db.delete('transactions', id),
     db.delete('entries', transactionDoc.entryId),
@@ -236,6 +240,9 @@ export async function updateTransaction(
     db.get('entries', prevTransactionDoc.entryId),
     prevTransactionDoc.secondEntryId ? db.get('entries', prevTransactionDoc.secondEntryId) : null
   ]);
+  if (!prevEntryDoc) {
+    return;
+  }
 
   const [transactionDoc, entryDoc, secondEntryDoc] = makeTransactionDocs(
     newParams,
@@ -291,7 +298,7 @@ export async function getRates(): Promise<Record<string, number>> {
   return rateDocs.reduce((acc, rateDoc) => {
     acc[rateDoc.code] = rateDoc.rate;
     return acc;
-  }, {});
+  }, {} as Record<string, number>);
 }
 
 export async function getEntries(accountId: string, reverse = true) {
@@ -394,6 +401,9 @@ export async function updateCurrency(currencyDoc: CurrencyDoc) {
 
 export async function renameAccountGroup(id: string, title: string) {
   const doc = await db.get('accountGroups', id);
+  if (!doc) {
+    return;
+  }
   await db.put('accountGroups', {
     ...doc,
     title
@@ -429,7 +439,7 @@ export function makeTransactionDocs(
     ...(reconciled ? { reconciled } : {})
   };
 
-  if (kind === TransactionKind.Transfer) {
+  if (kind === TransactionKind.Transfer && secondEntryId && secondAccountId) {
     const secondEntryDoc: EntryDoc = {
       id: secondEntryId,
       timestamp,
@@ -481,6 +491,9 @@ export async function recalcBalance(accountId: string) {
     }
   }
   const account = await getAccount(accountId);
+  if (!account) {
+    return;
+  }
   if (account.balance !== total) {
     await db.put('accounts', { ...account, balance: total });
     return true;
@@ -518,6 +531,9 @@ export async function createTransaction(params: TransactionParams) {
 
 export async function renameAccount(id: string, title: string) {
   const doc = await db.get('accounts', id);
+  if (!doc) {
+    return;
+  }
   await db.put('accounts', {
     ...doc,
     title

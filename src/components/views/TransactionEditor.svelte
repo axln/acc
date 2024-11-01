@@ -18,7 +18,7 @@
 
   $: account = $accounts.find((account) => account.id === id);
 
-  let transactionDoc: TransactionDoc;
+  let transactionDoc: TransactionDoc | undefined;
 
   const menuItems = tid
     ? [
@@ -36,6 +36,9 @@
   function saveHandler(e: CustomEvent<{ params: TransactionParams }>) {
     // console.log('trans params:', e.detail.params);
     if (tid) {
+      if (!transactionDoc) {
+        return;
+      }
       updateTransaction(transactionDoc, e.detail.params).then(() => {
         push(`/accounts/${id}`);
       });
