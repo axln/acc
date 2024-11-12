@@ -12,56 +12,6 @@ import {
 } from '~/lib/store';
 import { baseCurrencyName } from './const';
 
-interface AccDB extends DBSchema {
-  accounts: {
-    key: string;
-    value: AccountDoc;
-    indexes: {
-      title: string;
-    };
-  };
-  accountGroups: {
-    key: string;
-    value: AccountGroupDoc;
-    indexes: {
-      title: string;
-    };
-  };
-  currencies: {
-    key: string;
-    value: CurrencyDoc;
-  };
-  rates: {
-    key: string;
-    value: RateDoc;
-  };
-  categories: {
-    key: string;
-    value: CategoryDoc;
-    indexes: {
-      title: [string, string];
-    };
-  };
-  entries: {
-    key: string;
-    value: EntryDoc;
-    indexes: {
-      accountId: string;
-    };
-  };
-  transactions: {
-    key: string;
-    value: TransactionDoc;
-    indexes: {
-      timestamp: number;
-    };
-  };
-  settings: {
-    key: string;
-    value: SettingsDoc;
-  };
-}
-
 export interface DBSnapshot {
   ver: string;
   currencies: CurrencyDoc[];
@@ -146,6 +96,56 @@ export interface TransactionParams {
   secondAmount?: number;
   comment: string;
   reconciled?: boolean;
+}
+
+interface AccDB extends DBSchema {
+  accounts: {
+    key: string;
+    value: AccountDoc;
+    indexes: {
+      title: string;
+    };
+  };
+  accountGroups: {
+    key: string;
+    value: AccountGroupDoc;
+    indexes: {
+      title: string;
+    };
+  };
+  currencies: {
+    key: string;
+    value: CurrencyDoc;
+  };
+  rates: {
+    key: string;
+    value: RateDoc;
+  };
+  categories: {
+    key: string;
+    value: CategoryDoc;
+    indexes: {
+      title: [string, string];
+    };
+  };
+  entries: {
+    key: string;
+    value: EntryDoc;
+    indexes: {
+      accountId: string;
+    };
+  };
+  transactions: {
+    key: string;
+    value: TransactionDoc;
+    indexes: {
+      timestamp: number;
+    };
+  };
+  settings: {
+    key: string;
+    value: SettingsDoc;
+  };
 }
 
 export let db: IDBPDatabase<AccDB>;
@@ -259,8 +259,8 @@ export async function updateTransaction(
         ? db.put('entries', secondEntryDoc)
         : db.add('entries', secondEntryDoc)
       : prevSecondEntryDoc
-      ? db.delete('entries', prevSecondEntryDoc.id)
-      : null
+        ? db.delete('entries', prevSecondEntryDoc.id)
+        : null
   ]);
 
   const [changed1, changed2] = await Promise.all([
@@ -295,10 +295,13 @@ export function getSettings() {
 
 export async function getRates(): Promise<Record<string, number>> {
   const rateDocs = await db.getAll('rates');
-  return rateDocs.reduce((acc, rateDoc) => {
-    acc[rateDoc.code] = rateDoc.rate;
-    return acc;
-  }, {} as Record<string, number>);
+  return rateDocs.reduce(
+    (acc, rateDoc) => {
+      acc[rateDoc.code] = rateDoc.rate;
+      return acc;
+    },
+    {} as Record<string, number>
+  );
 }
 
 export async function getEntries(accountId: string, reverse = true) {
@@ -313,6 +316,8 @@ export async function getEntries(accountId: string, reverse = true) {
     }
   });
 }
+
+
 
 export async function getTransactions(start: number, end: number) {
   const transactionDocs = await db.getAllFromIndex(

@@ -21,8 +21,13 @@
   // let entries: EntryDoc[] = [];
   let entriesByDays: EntryGroup = {};
 
+  let lastTimestamp: number | undefined;
+
   getEntries(id).then((entryDocs) => {
     // entries = entryDocs;
+    if (entryDocs?.length > 0) {
+      lastTimestamp = entryDocs[0].timestamp;
+    }
 
     entriesByDays = entryDocs.reduce((acc, entry) => {
       const title = formatDate(entry.timestamp);
@@ -61,11 +66,10 @@
 <View>
   <Header
     slot="header"
-    title={account ? `${account.title}` : 'Not Found'}
+    title={account ? account.title : 'Not Found'}
     returnPath="/"
-    addPath={`/accounts/${id}/transactions/new`}
+    addPath="/accounts/{id}/transactions/new{lastTimestamp ? `?t=${lastTimestamp}` : ''}"
     {menuItems} />
-
   {#each Object.keys(entriesByDays) as dayKey}
     <div class="day">
       <span class="date">{dayKey}</span>
@@ -89,10 +93,12 @@
     display: flex;
     gap: 10px;
   }
+
   .date {
     flex: 1 1 auto;
     font-weight: bold;
   }
+
   .total {
     flex: 0 0 auto;
   }

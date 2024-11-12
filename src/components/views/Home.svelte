@@ -1,4 +1,4 @@
-<script module lang="ts">
+<script lang="ts" module>
   const menuItems = [
     {
       id: 'groups',
@@ -58,15 +58,17 @@
   import { getDBSnapshot } from '~/lib/utils';
   import { loadData } from '~/lib/db';
 
-  $: total = $accounts.reduce((total, acc) => {
-    if (acc.currencyCode === $baseCurrencyCode) {
-      total += acc.balance;
-    } else {
-      total += acc.balance * getCurrencyRate(acc.currencyCode, $baseCurrencyCode);
-    }
+  let total = $derived(
+    $accounts.reduce((total, acc) => {
+      if (acc.currencyCode === $baseCurrencyCode) {
+        total += acc.balance;
+      } else {
+        total += acc.balance * getCurrencyRate(acc.currencyCode, $baseCurrencyCode);
+      }
 
-    return total;
-  }, 0);
+      return total;
+    }, 0)
+  );
 </script>
 
 <View>

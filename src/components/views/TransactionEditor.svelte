@@ -20,6 +20,9 @@
 
   let transactionDoc: TransactionDoc | undefined;
 
+  const defaultTimestamp = tid ? null : getDefaultTimestamp();
+  // console.log('defaultTimestamp:', defaultTimestamp);
+
   const menuItems = tid
     ? [
         {
@@ -48,6 +51,23 @@
       });
     }
   }
+
+  function getDefaultTimestamp(): number | null {
+    const [_, qs] = location.hash.split('?');
+    if (!qs) {
+      return null;
+    }
+
+    if (qs) {
+      const params = new URLSearchParams(qs);
+      const t = params.get('t');
+      if (t) {
+        return parseInt(t) || null;
+      }
+    }
+
+    return null;
+  }
 </script>
 
 <View>
@@ -75,7 +95,7 @@
       <TransactionForm accountId={id} {transactionDoc} on:save={saveHandler} />
     {/await}
   {:else}
-    <TransactionForm accountId={id} on:save={saveHandler} />
+    <TransactionForm accountId={id} {defaultTimestamp} on:save={saveHandler} />
   {/if}
 </View>
 

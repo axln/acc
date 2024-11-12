@@ -1,7 +1,16 @@
+<script lang="ts" module>
+  import type { AccountDoc } from '~/lib/db';
+
+  interface AccountByGroupItem {
+    title: string;
+    accounts: AccountDoc[];
+  }
+</script>
+
 <script lang="ts">
   import { accounts, accountGroups } from '~/lib/store';
 
-  export let accountId: string;
+  export let accountId: string | undefined;
   export let placeholder: string = 'Account';
 
   $: accountsByGroup = $accountGroups.reduce((acc, group) => {
@@ -13,7 +22,7 @@
     };
     acc.push(item);
     return acc;
-  }, []);
+  }, [] as AccountByGroupItem[]);
 </script>
 
 <select class="select" bind:value={accountId} required>

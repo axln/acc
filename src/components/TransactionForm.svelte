@@ -16,7 +16,8 @@
   import { categoires } from '~/lib/store';
 
   export let accountId: string;
-  export let transactionDoc: TransactionDoc = null;
+  export let transactionDoc: TransactionDoc | null = null;
+  export let defaultTimestamp: number | null = null;
 
   let categoryCombo: CategoryCombo;
 
@@ -40,10 +41,16 @@
     reconciled = false
   } = transactionDoc || {};
 
-  let timestamp = getLocalCustomISODateString(new Date(transactionDoc?.timestamp || Date.now()));
+  let timestamp = getLocalCustomISODateString(
+    new Date(transactionDoc?.timestamp || defaultTimestamp || Date.now())
+  );
+
+  // $: console.log('timestamp:', timestamp);
 
   let amount: string = transactionDoc ? formatAmount(transactionDoc.amount) : '';
-  let secondAmount: string = transactionDoc ? formatAmount(transactionDoc.secondAmount) : '';
+  let secondAmount: string = transactionDoc?.secondAmount
+    ? formatAmount(transactionDoc.secondAmount)
+    : '';
 
   $: account = $accounts.find((item) => item.id === accountId);
   $: currencyCode = account?.currencyCode;
@@ -92,7 +99,7 @@
             kind,
             timestamp: new Date(timestamp).getTime(),
             accountId,
-            categoryId: categoryId || null,
+            categoryId: categoryId || undefined,
             amount: parseAmount(amount),
             comment: comment.trim(),
             ...(reconciled ? { reconciled: true } : {})
@@ -143,8 +150,14 @@
     <KindSelect bind:kind />
   </div>
 
-  <div>
+  <div class="date">
     <input class="input" type="datetime-local" bind:value={timestamp} />
+    <button
+      class="now"
+      type="button"
+      on:click={() => {
+        timestamp = getLocalCustomISODateString(new Date());
+      }}>Now</button>
   </div>
 
   <div>
@@ -159,8 +172,11 @@
       <br /> -->
       <div class="category">
         <CategoryCombo bind:categoryId bind:this={categoryCombo} bind:value={categoryValue} />
-        <button type="button" disabled={!categoryId} on:click|stopPropagation={clearHandler}
-          >Clear</button>
+        <button
+          class="clear"
+          type="button"
+          disabled={!categoryId}
+          on:click|stopPropagation={clearHandler}>Clear</button>
       </div>
     {/if}
   </div>
@@ -240,5 +256,16 @@
   .category {
     display: flex;
     gap: 10px;
+  }
+
+  .date {
+    display: flex;
+    gap: 10px;
+  }
+  .now {
+    width: 80px;
+  }
+  .clear {
+    width: 80px;
   }
 </style>
