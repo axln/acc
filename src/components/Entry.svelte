@@ -73,7 +73,7 @@
 
   .details {
     font-size: 13px;
-    color: #ddd;
+    color: #aaa;
     margin-top: 5px;
   }
 

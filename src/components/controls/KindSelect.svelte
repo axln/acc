@@ -1,12 +1,12 @@
 <script lang="ts">
+  import type { TransactionKind } from '~/lib/enum';
   import { transactionKinds } from '~/lib/const';
-  import type { TransactionKind } from '~/lib/db';
 
   export let kind: TransactionKind;
 
   function onclick(e: Event) {
     if (e.target instanceof HTMLSpanElement) {
-      console.log('kind:', e.target.dataset.value);
+      // console.log('kind:', e.target.dataset.value);
       kind = e.target.dataset.value as TransactionKind;
     }
   }
