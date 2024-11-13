@@ -16,6 +16,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
+  id={entry.transactionId}
   class="entry"
   class:reconciled={entry.reconciled}
   on:click={() => {

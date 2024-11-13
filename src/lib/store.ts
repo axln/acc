@@ -8,3 +8,10 @@ export const currencies = writable<CurrencyDoc[]>([]);
 export const settings = writable<SettingsDoc[]>([]);
 export const baseCurrencyCode = writable<string>('');
 export const rates = writable<Record<string, number>>({});
+
+export const prevRoute = writable<RouteInfo | null>(null);
+
+export interface RouteInfo {
+  route: string | RegExp;
+  params: Record<string, string> | null;
+}

@@ -140,7 +140,7 @@ export function chooseTextFile(onChoose: (text: string) => void) {
   fileInput.multiple = false;
 
   fileInput.onchange = () => {
-    const file = fileInput.files[0];
+    const file = fileInput!.files![0];
     if (file) {
       const reader = new FileReader();
       reader.onload = function () {
@@ -282,4 +282,23 @@ export function validateDBSnapshot(snapshot: DBSnapshot) {
   }
 
   return true;
+}
+
+export function highlightElement(element: HTMLElement, className: string) {
+  if (element.classList.contains(className)) {
+    element.classList.remove(className);
+    // hack with reflow triggering
+    void element.offsetWidth;
+    element.classList.add(className);
+    return;
+  }
+
+  element.addEventListener(
+    'animationend',
+    () => {
+      element.classList.remove(className);
+    },
+    { once: true }
+  );
+  element.classList.add(className);
 }

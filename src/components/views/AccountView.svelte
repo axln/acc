@@ -1,12 +1,4 @@
-<script lang="ts">
-  import { push } from 'svelte-spa-router';
-  import Header from '~/components/controls/Header.svelte';
-  import View from '~/components/controls/View.svelte';
-  import Entry from '~/components/Entry.svelte';
-  import { getEntries, type EntryDoc } from '~/lib/db';
-  import { accounts } from '~/lib/store';
-  import { formatAmount, formatDate } from '~/lib/utils';
-
+<script lang="ts" module>
   type EntryGroup = Record<
     string,
     {
@@ -15,13 +7,36 @@
     }
   >;
 
+  let scrollTop: number | null = null;
+</script>
+
+<script lang="ts">
+  import { tick } from 'svelte';
+  import { get } from 'svelte/store';
+
+  import { push } from 'svelte-spa-router';
+  import Header from '~/components/controls/Header.svelte';
+  import View from '~/components/controls/View.svelte';
+  import Entry from '~/components/Entry.svelte';
+  import { getEntries, type EntryDoc } from '~/lib/db';
+  import { accounts, prevRoute } from '~/lib/store';
+  import { formatAmount, formatDate, highlightElement } from '~/lib/utils';
+
   export let params: { id: string };
   const { id } = params;
 
   // let entries: EntryDoc[] = [];
   let entriesByDays: EntryGroup = {};
-
   let lastTimestamp: number | undefined;
+
+  $: account = $accounts.find((item) => item.id === id);
+  $: menuItems = [
+    {
+      id: 'edit',
+      title: 'Edit',
+      to: `/accounts/${id}/edit`
+    }
+  ];
 
   getEntries(id).then((entryDocs) => {
     // entries = entryDocs;
@@ -49,18 +64,25 @@
         return acc;
       }, 0);
     }
+
+    tick().then(() => {
+      const routeInfo = get(prevRoute);
+      if (routeInfo?.route === '/accounts/:id/transactions/:tid') {
+        if (scrollTop) {
+          document.documentElement.scrollTop = scrollTop;
+        }
+        if (routeInfo.params?.tid) {
+          const element = document.getElementById(routeInfo.params.tid);
+          if (element) {
+            highlightElement(element, 'highlight-animation');
+          }
+        }
+      }
+      scrollTop = null;
+    });
+
     // console.log('entriesByDays:', entriesByDays);
   });
-
-  $: account = $accounts.find((item) => item.id === id);
-
-  const menuItems = [
-    {
-      id: 'edit',
-      title: 'Edit',
-      to: `/accounts/${id}/edit`
-    }
-  ];
 </script>
 
 <View>
@@ -78,6 +100,7 @@
     {#each entriesByDays[dayKey].entries as entry (entry.id)}
       <Entry
         on:transaction={(e) => {
+          scrollTop = document.documentElement.scrollTop;
           push(`/accounts/${id}/transactions/${e.detail.id}`);
         }}
         {entry} />

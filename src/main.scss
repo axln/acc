@@ -29,3 +29,18 @@ body {
   flex-direction: column;
   height: 100%;
 }
+
+@keyframes highlight {
+  0% {
+    background-color: #fff4c2;
+  }
+
+  100% {
+    background-color: initial;
+  }
+}
+
+.highlight-animation {
+  animation: highlight 1s linear 1;
+  animation-fill-mode: forwards;
+}
