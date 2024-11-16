@@ -13,7 +13,6 @@
 <script lang="ts">
   import { tick } from 'svelte';
   import { get } from 'svelte/store';
-
   import { push } from 'svelte-spa-router';
   import Header from '~/components/controls/Header.svelte';
   import View from '~/components/controls/View.svelte';
@@ -29,6 +28,9 @@
   let entriesByDays: EntryGroup = {};
   let lastTimestamp: number | undefined;
 
+  const createTransactionId = getCreatedTransactionId();
+  // console.log('createTransactionId:', createTransactionId);
+
   $: account = $accounts.find((item) => item.id === id);
   $: menuItems = [
     {
@@ -41,7 +43,7 @@
   getEntries(id).then((entryDocs) => {
     // entries = entryDocs;
     if (entryDocs?.length > 0) {
-      lastTimestamp = entryDocs[0].timestamp;
+      lastTimestamp = entryDocs[0].timestamp + 60000; // add 1 minute
     }
 
     entriesByDays = entryDocs.reduce((acc, entry) => {
@@ -67,12 +69,16 @@
 
     tick().then(() => {
       const routeInfo = get(prevRoute);
-      if (routeInfo?.route === '/accounts/:id/transactions/:tid') {
+      if (
+        routeInfo?.route === '/accounts/:id/transactions/:tid' ||
+        routeInfo?.route === '/accounts/:id/transactions/new'
+      ) {
         if (scrollTop) {
           document.documentElement.scrollTop = scrollTop;
         }
-        if (routeInfo.params?.tid) {
-          const element = document.getElementById(routeInfo.params.tid);
+        const tid = routeInfo.params?.tid || createTransactionId;
+        if (tid) {
+          const element = document.getElementById(tid);
           if (element) {
             highlightElement(element, 'highlight-animation');
           }
@@ -83,6 +89,20 @@
 
     // console.log('entriesByDays:', entriesByDays);
   });
+
+  function getCreatedTransactionId(): string | null {
+    const [_, qs] = location.hash.split('?');
+    if (!qs) {
+      return null;
+    }
+
+    if (qs) {
+      const params = new URLSearchParams(qs);
+      return params.get('tid');
+    }
+
+    return null;
+  }
 </script>
 
 <View>
@@ -91,6 +111,10 @@
     title={account ? account.title : 'Not Found'}
     returnPath="/"
     addPath="/accounts/{id}/transactions/new{lastTimestamp ? `?t=${lastTimestamp}` : ''}"
+    on:add={() => {
+      scrollTop = document.documentElement.scrollTop;
+      // console.log('scrollTop saved:', scrollTop);
+    }}
     {menuItems} />
   {#each Object.keys(entriesByDays) as dayKey}
     <div class="day">

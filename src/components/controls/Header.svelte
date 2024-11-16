@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  import { link } from 'svelte-spa-router';
+  import { link, push } from 'svelte-spa-router';
   import type { MenuItem } from '~/components/controls/Menu.svelte';
   import DropDown from './DropDown.svelte';
   import Menu from '~/components/controls/Menu.svelte';
@@ -31,7 +31,15 @@
 
   <div class="buttons">
     {#if addPath}
-      <a class="link" href={addPath} use:link draggable={false}><PlusIcon /></a>
+      <!-- <a class="link" href={addPath} use:link draggable={false}><PlusIcon /></a> -->
+      <button
+        class="linkbutton"
+        on:click={() => {
+          dispatch('add');
+          push(addPath);
+        }}>
+        <PlusIcon />
+      </button>
     {/if}
 
     {#if menuItems}
@@ -92,5 +100,14 @@
 
   .dropdown {
     color: var(--default-text-color);
+  }
+  .linkbutton {
+    background-color: transparent;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+    padding: 0;
   }
 </style>

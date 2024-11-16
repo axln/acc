@@ -22,6 +22,7 @@
   let categoryCombo: CategoryCombo;
 
   let amountInput: HTMLInputElement;
+  let dateInput: HTMLInputElement;
   let categoryValue: string;
 
   // $: console.log('categoryValue:', categoryValue);
@@ -31,6 +32,7 @@
       // amountInput.focus();
       // amountInput.setSelectionRange(0, amountInput.value.length);
     }
+    dateInput?.focus();
   });
 
   let {
@@ -151,7 +153,7 @@
   </div>
 
   <div class="date">
-    <input class="input" type="datetime-local" bind:value={timestamp} />
+    <input class="input" type="datetime-local" bind:value={timestamp} bind:this={dateInput} />
     <button
       class="now"
       type="button"

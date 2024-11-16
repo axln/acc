@@ -46,8 +46,8 @@
         push(`/accounts/${id}`);
       });
     } else {
-      createTransaction(e.detail.params).then(() => {
-        push(`/accounts/${id}`);
+      createTransaction(e.detail.params).then((doc) => {
+        push(`/accounts/${id}?tid=${doc.id}`);
       });
     }
   }

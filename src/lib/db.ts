@@ -317,8 +317,6 @@ export async function getEntries(accountId: string, reverse = true) {
   });
 }
 
-
-
 export async function getTransactions(start: number, end: number) {
   const transactionDocs = await db.getAllFromIndex(
     'transactions',
@@ -532,6 +530,7 @@ export async function createTransaction(params: TransactionParams) {
   if (changed1 || changed2) {
     accounts.set(await getAccounts());
   }
+  return transactionDoc;
 }
 
 export async function renameAccount(id: string, title: string) {
