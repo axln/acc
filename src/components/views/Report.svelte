@@ -16,20 +16,26 @@
   const now = new Date();
   let monthYear = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}`;
 
-  let incomeCat: Cat | undefined = null;
-  let expenseCat: Cat | undefined = null;
+  let incomeCat: Cat | null = null;
+  let expenseCat: Cat | null = null;
 
   let docs: TransactionDoc[] | null = null;
 
-  const categoryHash = $categoires.reduce((acc, item) => {
-    acc[item.id] = item;
-    return acc;
-  }, {});
+  const categoryHash = $categoires.reduce(
+    (acc, item) => {
+      acc[item.id] = item;
+      return acc;
+    },
+    {} as Record<string, CategoryDoc>
+  );
 
-  const accountHash = $accounts.reduce((acc, item) => {
-    acc[item.id] = item;
-    return acc;
-  }, {});
+  const accountHash = $accounts.reduce(
+    (acc, item) => {
+      acc[item.id] = item;
+      return acc;
+    },
+    {} as Record<string, AccountDoc>
+  );
 
   $: updateData(monthYear);
 
